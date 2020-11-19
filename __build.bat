@@ -1,2 +1,3 @@
-md build > nul
-csc /out:build/Octarine.exe program.cs defs.cs engines.cs engines/win10.cs gui/view.cs gui/view_settings.cs gui/controller.cs /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.dll" /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.WindowsRuntime.dll" /r:"%programfiles(x86)%\Windows Kits\10\UnionMetadata\10.0.18362.0\Windows.winmd" /r:lib/Interop.WIA.dll /optimize /target:winexe /platform:anycpu
+md build 2>nul
+rc /fo build/Octarine.res Octarine.rc
+csc /out:build/Octarine.exe program.cs defs.cs engines.cs engines/win10.cs gui/view.cs gui/view_settings.cs gui/controller.cs /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.dll" /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.WindowsRuntime.dll" /r:"%programfiles(x86)%\Windows Kits\10\UnionMetadata\10.0.18362.0\Windows.winmd" /r:lib/Interop.WIA.dll /optimize /target:winexe /platform:anycpu /win32res:build/Octarine.res
