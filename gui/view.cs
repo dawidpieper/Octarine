@@ -95,7 +95,7 @@ edt_result.Text=result;
 }
 
 public void RefreshResult() {
-if(this.file!="") controller.PrepareOCR(this.file, CurrentEngine());
+if(this.file!=null) controller.PrepareOCR(this.file, CurrentEngine());
 }
 
 public void ShowError(OctarineError error) {
