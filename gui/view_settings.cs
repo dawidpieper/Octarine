@@ -21,7 +21,7 @@ controller=tcontroller;
 engines = new List<OctarineEngine.Engine>();
 foreach(OctarineEngine.Engine engine in OctarineEngines.engines) engines.Add(engine);
 
-this.Size = new Size(320,240);
+this.Size = new Size(320,320);
 this.Text = "Ustawienia - Octarine";
 
 lb_engine = new Label();
@@ -30,7 +30,7 @@ lb_engine.Location = new Point(20, 20);
 lb_engine.Text="Silnik";
 this.Controls.Add(lb_engine);
 lst_engine = new ListBox();
-lst_engine.Size = new Size(100, 100);
+lst_engine.Size = new Size(180, 100);
 lst_engine.Location = new Point(120, 20);
 this.Controls.Add(lst_engine);
 
@@ -40,20 +40,20 @@ lb_language.Location = new Point(20, 140);
 lb_language.Text="Język";
 this.Controls.Add(lb_language);
 lst_language = new ListBox();
-lst_language.Size = new Size(100, 100);
+lst_language.Size = new Size(180, 100);
 lst_language.Location = new Point(120, 140);
 this.Controls.Add(lst_language);
 
 btn_ok = new Button();
 btn_ok.Text = "OK";
-btn_ok.Size = new Size(100, 50);
-btn_ok.Location = new Point(50, 250);
+btn_ok.Size = new Size(50, 50);
+btn_ok.Location = new Point(20, 250);
 this.Controls.Add(btn_ok);
 
 btn_cancel = new Button();
 btn_cancel.Text = "Anuluj";
-btn_cancel.Size = new Size(100, 50);
-btn_cancel.Location = new Point(170, 250);
+btn_cancel.Size = new Size(50, 50);
+btn_cancel.Location = new Point(250, 250);
 this.Controls.Add(btn_cancel);
 
 this.CancelButton = btn_cancel;
