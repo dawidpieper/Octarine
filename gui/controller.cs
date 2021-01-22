@@ -46,11 +46,11 @@ updateWorkerCTS = new CancellationTokenSource();
 updateWorkerCT = updateWorkerCTS.Token;
 updateWorker = Task.Factory.StartNew(() => {
 
-(string result, OctarineError error) = engine.GetTextFromFileAsync(file).Result;
+(string result, OctarineError error, string errorMessage) = engine.GetTextFromFileAsync(file).Result;
 if(result!=null)
 wnd.SetResult(file, result);
 else
-wnd.ShowError(error);
+wnd.ShowError(error, errorMessage);
 updateWorker=null;
 }, updateWorkerCT);
 }

@@ -98,7 +98,7 @@ public void RefreshResult() {
 if(this.file!=null) controller.PrepareOCR(this.file, CurrentEngine());
 }
 
-public void ShowError(OctarineError error) {
+public void ShowError(OctarineError error, string msg=null) {
 string errormessage = "Wystąpił nierozpoznany błąd";
 switch(error) {
 case OctarineError.LanguageNotSupported:
@@ -108,6 +108,7 @@ case OctarineError.WrongFileFormat:
 errormessage = "Nierozpoznany format pliku.";
 break;
 }
+if(msg!=null) errormessage+="\n"+msg;
 MessageBox.Show(errormessage, "Wystąpił błąd podczas próby otwarcia pliku", MessageBoxButtons.OK, MessageBoxIcon.Error);
 }
 }

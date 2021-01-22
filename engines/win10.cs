@@ -20,9 +20,9 @@ var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Langua
 this.language = new Windows.Globalization.Language(topUserLanguage);
 }
 public override string name {get{return "Windows 10 OCR";}}
-public override async Task<(string, OctarineError)> GetTextFromFileAsync(string filePath) {
+public override async Task<(string, OctarineError, string)> GetTextFromFileAsync(string filePath) {
 if(!OcrEngine.IsLanguageSupported(language))
-return (null, OctarineError.LanguageNotSupported);
+return (null, OctarineError.LanguageNotSupported,null);
 try {
 var engine = OcrEngine.TryCreateFromLanguage(language);
 var file = await StorageFile.GetFileFromPathAsync(filePath);
@@ -41,7 +41,7 @@ if(i>0) sb.Append("\r\n");
 sb.Append(result.Text);
 }
 }
-return (sb.ToString(), OctarineError.Success);
+return (sb.ToString(), OctarineError.Success,null);
 } else {
 var stream = await file.OpenAsync(FileAccessMode.Read);
 var decoder = await BitmapDecoder.CreateAsync(stream);
@@ -49,10 +49,10 @@ var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
 
 var ocrResult = await engine.RecognizeAsync(softwareBitmap);
 
-return (ocrResult.Text, OctarineError.Success);
+return (ocrResult.Text, OctarineError.Success,null);
 }
-} catch {
-return (null, OctarineError.WrongFileFormat);
+} catch(Exception ex) {
+return (null, OctarineError.WrongFileFormat, ex.Message);
 }
 }
 
