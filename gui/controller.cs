@@ -42,17 +42,34 @@ updateWorker.Wait();
 } catch{}
 updateWorker=null;
 }
+LoadingWindow wnd_waiter = new LoadingWindow("Rozpoznawanie");
 updateWorkerCTS = new CancellationTokenSource();
 updateWorkerCT = updateWorkerCTS.Token;
 updateWorker = Task.Factory.StartNew(() => {
+wnd_waiter.SetStatus("Przygotowywanie");
 
-(string result, OctarineError error, string errorMessage) = engine.GetTextFromFileAsync(file).Result;
+OCRStatus status = new OCRStatus();
+status.OCRCancellationToken = updateWorkerCT;
+status.PageCurrentChanged += (sender, e) => {
+wnd_waiter.SetStatus($"Rozpoznawanie strony {status.PageCurrent} z {status.PageCount}");
+wnd_waiter.SetPercentage((int)(100*status.PageCurrent/status.PageCount));
+};
+string result = OCR.GetTextFromFileAsync(file, engine, status).Result;
 if(result!=null)
 wnd.SetResult(file, result);
 else
-wnd.ShowError(error, errorMessage);
+if(status.Error!=OctarineError.CancellationRequested) wnd.ShowError(status.Error, status.ErrorMessage);
+wnd_waiter.Close();
 updateWorker=null;
 }, updateWorkerCT);
+wnd_waiter.ShowDialog(wnd);
+if(updateWorker!=null && !updateWorker.IsCompleted) {
+updateWorkerCTS.Cancel();
+try {
+updateWorker.Wait();
+} catch{}
+updateWorker=null;
+}
 }
 
 public void SetLanguage(OctarineEngine.Engine engine, Language language) {

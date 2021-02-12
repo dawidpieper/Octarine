@@ -62,7 +62,7 @@ this.AcceptButton = btn_ok;
 lst_engine.SelectedIndexChanged += (sender, e) => ShowLanguagesForEngine(engines[lst_engine.SelectedIndex]);
 if(engines.Count()>0) {
 foreach(OctarineEngine.Engine engine in engines)
-lst_engine.Items.Add(engine.name);
+lst_engine.Items.Add(engine.Name);
 lst_engine.SelectedIndex=0;
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Globalization;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 
 namespace Octarine {
 public class OctarineEngines {
@@ -20,8 +21,8 @@ registeredEngines.Add(engine);
 
 namespace Octarine.OctarineEngine {
 public abstract class Engine {
-public abstract string name {get;}
-public abstract Task<(string, OctarineError,string)> GetTextFromFileAsync(string filePath);
+public abstract string Name {get;}
+public abstract Task<(string, OctarineError,string)> GetTextFromStreamAsync(IRandomAccessStream stream);
 public abstract Language currentLanguage {get;}
 public abstract Language[] languages {get;}
 public abstract void SetLanguage(Language lang);

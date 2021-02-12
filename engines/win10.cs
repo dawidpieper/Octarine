@@ -19,38 +19,17 @@ public Win10Engine() {
 var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Languages[0];
 this.language = new Windows.Globalization.Language(topUserLanguage);
 }
-public override string name {get{return "Windows 10 OCR";}}
-public override async Task<(string, OctarineError, string)> GetTextFromFileAsync(string filePath) {
+public override string Name {get{return "Windows 10 OCR";}}
+
+public override async Task<(string, OctarineError, string)> GetTextFromStreamAsync(IRandomAccessStream stream) {
 if(!OcrEngine.IsLanguageSupported(language))
 return (null, OctarineError.LanguageNotSupported,null);
 try {
 var engine = OcrEngine.TryCreateFromLanguage(language);
-var file = await StorageFile.GetFileFromPathAsync(filePath);
-if(Path.GetExtension(filePath).ToLower()==".pdf") {
-var pdfDoc = await PdfDocument.LoadFromFileAsync(file);
-uint pageCount = pdfDoc.PageCount;
-var sb = new StringBuilder();
-for (uint i = 0; i < pageCount; i++) {
-using (PdfPage page = pdfDoc.GetPage(i)) {
-var stream = new InMemoryRandomAccessStream();
-await page.RenderToStreamAsync(stream);
-var decoder = await BitmapDecoder.CreateAsync(stream);
-var softwareBitmap = await decoder.GetSoftwareBitmapAsync(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Premultiplied);
-OcrResult result = await engine.RecognizeAsync(softwareBitmap);
-if(i>0) sb.Append("\r\n");
-sb.Append(result.Text);
-}
-}
-return (sb.ToString(), OctarineError.Success,null);
-} else {
-var stream = await file.OpenAsync(FileAccessMode.Read);
 var decoder = await BitmapDecoder.CreateAsync(stream);
 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
-
 var ocrResult = await engine.RecognizeAsync(softwareBitmap);
-
 return (ocrResult.Text, OctarineError.Success,null);
-}
 } catch(Exception ex) {
 return (null, OctarineError.WrongFileFormat, ex.Message);
 }
