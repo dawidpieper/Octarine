@@ -1,0 +1,29 @@
+#include <windows.h>
+
+1 VERSIONINFO
+FILEVERSION 1, 0, 0, 0
+PRODUCTVERSION 1, 0, 0, 0
+FILEOS VOS_NT_WINDOWS32
+FILETYPE VFT_DLL
+{
+ BLOCK "StringFileInfo"
+ {
+  BLOCK "040904E4"
+  {
+   VALUE "ProductName", "TesseractOctarine\000"
+   VALUE "ProductVersion", "TesseractOctarine 1.0\000"
+   VALUE "CompanyName", "Dawid Pieper\000"
+   VALUE "FileDescription", "Tesseract plugin for Octarine - A Simple OCR\000"
+   VALUE "FileVersion", "1.0.0.0\000"
+   VALUE "InternalName", "TesseractOctarine\000"
+   VALUE "LegalCopyright", "Dawid Pieper\000"
+   VALUE "OriginalFilename", "TesseractOctarine.dll\000"
+  }
+ }
+ BLOCK "VarFileInfo"
+ {
+  VALUE "Translation", 1045, 1252
+ }
+}
+
+1 MANIFEST "manifest.xml"

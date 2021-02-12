@@ -17,6 +17,20 @@ using Windows.Globalization;
 namespace Octarine {
 public class OctarineController {
 
+private OctarineEngine.iEngine _Engine=null;
+
+public OctarineEngine.iEngine Engine {
+get {
+if(_Engine!=null) return _Engine;
+OctarineEngine.iEngine[] engines = OctarineEngines.engines;
+if(engines.Count()==0) return null;
+return engines[0];
+}
+set {
+_Engine=value;
+}
+}
+
 private OctarineWindow wnd=null;
 
 private Task updateWorker = null;
@@ -34,7 +48,7 @@ public void Initiate() {
 
 }
 
-public void PrepareOCR(string file, OctarineEngine.Engine engine) {
+public void PrepareOCR(string file) {
 if(updateWorker!=null && !updateWorker.IsCompleted) {
 updateWorkerCTS.Cancel();
 try {
@@ -54,7 +68,7 @@ status.PageCurrentChanged += (sender, e) => {
 wnd_waiter.SetStatus($"Rozpoznawanie strony {status.PageCurrent} z {status.PageCount}");
 wnd_waiter.SetPercentage((int)(100*status.PageCurrent/status.PageCount));
 };
-string result = OCR.GetTextFromFileAsync(file, engine, status).Result;
+string result = OCR.GetTextFromFileAsync(file, this.Engine, status).Result;
 if(result!=null)
 wnd.SetResult(file, result);
 else
@@ -72,7 +86,7 @@ updateWorker=null;
 }
 }
 
-public void SetLanguage(OctarineEngine.Engine engine, Language language) {
+public void SetLanguage(OctarineEngine.iEngine engine, Language language) {
 engine.SetLanguage(language);
 wnd.RefreshResult();
 }

@@ -7,24 +7,24 @@ using Windows.Storage.Streams;
 
 namespace Octarine {
 public class OctarineEngines {
-private static List<OctarineEngine.Engine> registeredEngines = new List<OctarineEngine.Engine>();
+private static List<OctarineEngine.iEngine> registeredEngines = new List<OctarineEngine.iEngine>();
 
-public static OctarineEngine.Engine[] engines {get{
+public static OctarineEngine.iEngine[] engines {get{
 return registeredEngines.ToArray();
 }}
 
-public static void RegisterEngine(OctarineEngine.Engine engine) {
+public static void RegisterEngine(OctarineEngine.iEngine engine) {
 registeredEngines.Add(engine);
 }
 }
 }
 
 namespace Octarine.OctarineEngine {
-public abstract class Engine {
-public abstract string Name {get;}
-public abstract Task<(string, OctarineError,string)> GetTextFromStreamAsync(IRandomAccessStream stream);
-public abstract Language currentLanguage {get;}
-public abstract Language[] languages {get;}
-public abstract void SetLanguage(Language lang);
+public interface iEngine {
+public string Name {get;}
+public Task<(string, OctarineError,string)> GetTextFromStreamAsync(IRandomAccessStream stream);
+public Language currentLanguage {get;}
+public Language[] languages {get;}
+public void SetLanguage(Language lang);
 }
 }

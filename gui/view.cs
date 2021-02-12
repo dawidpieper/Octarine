@@ -12,8 +12,6 @@ using Windows.Globalization;
 
 namespace Octarine {
 public class OctarineWindow : Form {
-private List<OctarineEngine.Engine> engines;
-private int engineIndex;
 private RichTextBox edt_result;
 private OctarineController controller;
 private string file=null;
@@ -22,10 +20,6 @@ public OctarineWindow(OctarineController tcontroller) {
 controller=tcontroller;
 controller.SetWindow(this);
 this.Shown += (sender, e) => controller.Initiate();
-
-engines = new List<OctarineEngine.Engine>();
-foreach(OctarineEngine.Engine engine in OctarineEngines.engines) engines.Add(engine);
-engineIndex=0;
 
 this.Size = new Size(800,600);
 this.Text = "Octarine";
@@ -65,16 +59,12 @@ MainMenuStrip = ms;
 }
 
 
-private OctarineEngine.Engine CurrentEngine() {
-return engines[engineIndex];
-}
-
 private void BrowseFile() {
 var dialog = new OpenFileDialog();
 dialog.Filter = "Wszystkie obsługiwane pliki|*.bmp;*.jpg;*.png;*.gif;*.pdf|Pliki zdjęć|*.bmp;*.jpg;*.png;*.gif|Pliki pdf|*.pdf";
 dialog.RestoreDirectory=true;
 if(dialog.ShowDialog()==DialogResult.OK)
-controller.PrepareOCR(dialog.FileName, CurrentEngine());
+controller.PrepareOCR(dialog.FileName);
 dialog.Dispose();
 }
 
@@ -95,7 +85,7 @@ edt_result.Text=result;
 }
 
 public void RefreshResult() {
-if(this.file!=null) controller.PrepareOCR(this.file, CurrentEngine());
+if(this.file!=null) controller.PrepareOCR(this.file);
 }
 
 public void ShowError(OctarineError error, string msg=null) {

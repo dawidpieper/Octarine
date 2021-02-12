@@ -17,10 +17,10 @@ Projekt jest udostępniony obecnie w wersji poglądowej alfa.
 
 ## Silniki OCR
 * Windows 10 OCR
+* [Tesseract](https://github.com/tesseract-ocr/tesseract)
 
 ## Cele
 Najbliższe cele obejmują:
-* Napisanie wsparcia dla silnika [Tesseract](https://github.com/tesseract-ocr/tesseract),
 * Dodanie obsługi skanerów.
 
 ## Zaproszenie do współpracy

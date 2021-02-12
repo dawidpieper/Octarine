@@ -13,15 +13,15 @@ using Windows.UI.Xaml.Controls;
 using Windows.Graphics.Imaging;
 
 namespace Octarine.OctarineEngine {
-public class Win10Engine : Engine {
+public class Win10Engine : iEngine {
 private Language language;
 public Win10Engine() {
 var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Languages[0];
 this.language = new Windows.Globalization.Language(topUserLanguage);
 }
-public override string Name {get{return "Windows 10 OCR";}}
+public string Name {get{return "Windows 10 OCR";}}
 
-public override async Task<(string, OctarineError, string)> GetTextFromStreamAsync(IRandomAccessStream stream) {
+public async Task<(string, OctarineError, string)> GetTextFromStreamAsync(IRandomAccessStream stream) {
 if(!OcrEngine.IsLanguageSupported(language))
 return (null, OctarineError.LanguageNotSupported,null);
 try {
@@ -35,17 +35,17 @@ return (null, OctarineError.WrongFileFormat, ex.Message);
 }
 }
 
-public override Language[] languages {get{
+public Language[] languages {get{
 var langs = new List<Language>();
 foreach(var lang in OcrEngine.AvailableRecognizerLanguages) langs.Add(lang);
 return langs.ToArray();
 }}
 
-public override void SetLanguage(Language lang) {
+public void SetLanguage(Language lang) {
 this.language = lang;
 }
 
-public override Language currentLanguage {get{
+public Language currentLanguage {get{
 return this.language;
 }}
 }

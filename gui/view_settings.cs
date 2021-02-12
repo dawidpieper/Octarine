@@ -8,18 +8,20 @@ using Windows.Globalization;
 
 namespace Octarine {
 public class OctarineSettingsWindow : Form {
-private List<OctarineEngine.Engine> engines;
+private List<OctarineEngine.iEngine> engines;
 
 private Label lb_engine, lb_language;
 private ListBox lst_engine, lst_language;
 private Button btn_ok, btn_cancel;
 private OctarineController controller;
 
+
 public OctarineSettingsWindow(OctarineController tcontroller) {
 controller=tcontroller;
 
-engines = new List<OctarineEngine.Engine>();
-foreach(OctarineEngine.Engine engine in OctarineEngines.engines) engines.Add(engine);
+engines = new List<OctarineEngine.iEngine>();
+foreach(OctarineEngine.iEngine engine in OctarineEngines.engines)
+engines.Add(engine);
 
 this.Size = new Size(320,320);
 this.Text = "Ustawienia - Octarine";
@@ -61,22 +63,28 @@ this.AcceptButton = btn_ok;
 
 lst_engine.SelectedIndexChanged += (sender, e) => ShowLanguagesForEngine(engines[lst_engine.SelectedIndex]);
 if(engines.Count()>0) {
-foreach(OctarineEngine.Engine engine in engines)
+foreach(OctarineEngine.iEngine engine in engines) {
 lst_engine.Items.Add(engine.Name);
-lst_engine.SelectedIndex=0;
+if(engine==controller.Engine) lst_engine.SelectedIndex=lst_engine.Items.Count-1;
+}
 }
 
 btn_cancel.Click += (sender, e) => this.Close();
 btn_ok.Click += (sender, e) => {
 if(engines.Count()>0) {
 var engine = engines[lst_engine.SelectedIndex];
+if(lst_language.SelectedIndex==-1) {
+MessageBox.Show(this, "Nie wybrano języka.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+return;
+}
+controller.Engine=engine;
 controller.SetLanguage(engine, engine.languages[lst_language.SelectedIndex]);
 this.Close();
 }
 };
 }
 
-private void ShowLanguagesForEngine(OctarineEngine.Engine engine) {
+private void ShowLanguagesForEngine(OctarineEngine.iEngine engine) {
 lst_language.Items.Clear();
 lst_language.SelectedIndex=-1;
 int i=0;

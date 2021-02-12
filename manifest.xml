@@ -2,7 +2,7 @@
 <assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
 <assemblyIdentity
     name="dawidpieper.Octarine"
-    version="0.0.0.5"
+    version="0.0.0.6"
     type="win32"/>
 <description>Octarine</description>
 <trustInfo xmlns="urn:schemas-microsoft-com:asm.v3">
