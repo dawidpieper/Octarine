@@ -20,7 +20,6 @@ Projekt jest udostępniony obecnie w wersji poglądowej alfa.
 
 ## Cele
 Najbliższe cele obejmują:
-* Stworzenie okna dialogowego na czas rozpoznawania plików pdf,
 * Napisanie wsparcia dla silnika [Tesseract](https://github.com/tesseract-ocr/tesseract),
 * Dodanie obsługi skanerów.
 
