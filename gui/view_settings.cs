@@ -25,6 +25,7 @@ engines.Add(engine);
 
 this.Size = new Size(320,320);
 this.Text = "Ustawienia - Octarine";
+this.ShowInTaskbar=false;
 
 lb_engine = new Label();
 lb_engine.Size = new Size(100, 100);

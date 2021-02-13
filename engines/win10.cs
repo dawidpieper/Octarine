@@ -29,9 +29,14 @@ var engine = OcrEngine.TryCreateFromLanguage(language);
 var decoder = await BitmapDecoder.CreateAsync(stream);
 var softwareBitmap = await decoder.GetSoftwareBitmapAsync();
 var ocrResult = await engine.RecognizeAsync(softwareBitmap);
-return (ocrResult.Text, OctarineError.Success,null);
+var sb = new StringBuilder();
+foreach(OcrLine line in ocrResult.Lines) {
+sb.Append(line.Text);
+sb.Append("\n");
+}
+return (sb.ToString(), OctarineError.Success,null);
 } catch(Exception ex) {
-return (null, OctarineError.WrongFileFormat, ex.Message);
+return (null, OctarineError.EngineError, ex.Message);
 }
 }
 

@@ -97,6 +97,9 @@ break;
 case OctarineError.WrongFileFormat:
 errormessage = "Nierozpoznany format pliku.";
 break;
+case OctarineError.EngineError:
+errormessage = "Błąd wewnętrzny silnika OCR.";
+break;
 }
 if(msg!=null) errormessage+="\n"+msg;
 MessageBox.Show(errormessage, "Wystąpił błąd podczas próby otwarcia pliku", MessageBoxButtons.OK, MessageBoxIcon.Error);

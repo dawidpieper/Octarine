@@ -3,6 +3,7 @@ public enum OctarineError {
 Success,
 CancellationRequested,
 LanguageNotSupported,
-WrongFileFormat
+WrongFileFormat,
+EngineError
 }
 }

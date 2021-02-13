@@ -38,7 +38,7 @@ return (page.GetText(), OctarineError.Success, null);
 }
 }
 } catch{
-return (null, OctarineError.WrongFileFormat, null);
+return (null, OctarineError.EngineError, null);
 }
 }
 
