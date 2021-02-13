@@ -20,6 +20,7 @@ var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Langua
 this.language = new Windows.Globalization.Language(topUserLanguage);
 }
 public string Name {get{return "Windows 10 OCR";}}
+public bool ShouldRegister {get{return true;}}
 
 public async Task<(string, OctarineError, string)> GetTextFromStreamAsync(IRandomAccessStream stream) {
 if(!OcrEngine.IsLanguageSupported(language))

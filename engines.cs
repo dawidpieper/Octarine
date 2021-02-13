@@ -26,5 +26,6 @@ public Task<(string, OctarineError,string)> GetTextFromStreamAsync(IRandomAccess
 public Language currentLanguage {get;}
 public Language[] languages {get;}
 public void SetLanguage(Language lang);
+public bool ShouldRegister{get;}
 }
 }

@@ -23,7 +23,15 @@ private static void RegisterEngines() {
 Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(p => typeof(OctarineEngine.iEngine).IsAssignableFrom(p) && p.IsClass).ToArray();
 foreach (Type type in types) {
 OctarineEngine.iEngine engine = (OctarineEngine.iEngine)Activator.CreateInstance(type);
-OctarineEngines.RegisterEngine(engine);
+if(engine.ShouldRegister) OctarineEngines.RegisterEngine(engine);
+}
+}
+
+private static void RegisterHooks() {
+Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(p => typeof(OctarineHook.iHook).IsAssignableFrom(p) && p.IsClass).ToArray();
+foreach (Type type in types) {
+OctarineHook.iHook hook = (OctarineHook.iHook)Activator.CreateInstance(type);
+OctarineHooks.RegisterHook(hook);
 }
 }
 
@@ -42,6 +50,9 @@ return assembly;
 
 LoadPlugins();
 RegisterEngines();
+RegisterHooks();
+
+OctarineHooks.TriggerEvent(OctarineEvent.ProgramLoaded);
 
 Application.EnableVisualStyles();
 

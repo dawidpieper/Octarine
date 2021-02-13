@@ -6,4 +6,7 @@ LanguageNotSupported,
 WrongFileFormat,
 EngineError
 }
+public enum OctarineEvent {
+ProgramLoaded
+}
 }
