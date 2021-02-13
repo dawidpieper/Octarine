@@ -89,5 +89,26 @@ status.ErrorMessage=ex.Message;
 return null;
 }
 }
+
+public static async Task<string> GetTextFromStreamAsync(IRandomAccessStream stream, OctarineEngine.iEngine engine, OCRStatus status) {
+try {
+(string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream);
+if(result==null) {
+status.Error=error;
+status.ErrorMessage=errorMessage;
+return null;
+}
+if(status.OCRCancellationToken.IsCancellationRequested) {
+status.Error=OctarineError.CancellationRequested;
+return null;
+}
+return result;
+} catch(Exception ex) {
+status.Error=OctarineError.WrongFileFormat;
+status.ErrorMessage=ex.Message;
+return null;
+}
+}
+
 }
 }

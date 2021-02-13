@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
+using Windows.Globalization;
 
 namespace Octarine {
 public class Program {
@@ -35,6 +36,17 @@ OctarineHooks.RegisterHook(hook);
 }
 }
 
+private static void SetEngines() {
+foreach(OctarineEngine.iEngine engine in OctarineEngines.engines) {
+string lng = Config.ReadConfig("Language", @"engines\"+engine.GetType().Name);
+if(lng!=null) {
+try {
+engine.SetLanguage(new Language(lng));
+} catch{}
+}
+}
+}
+
 [STAThread]
 public static void Main() {
 
@@ -53,6 +65,8 @@ RegisterEngines();
 RegisterHooks();
 
 OctarineHooks.TriggerEvent(OctarineEvent.ProgramLoaded);
+
+SetEngines();
 
 Application.EnableVisualStyles();
 

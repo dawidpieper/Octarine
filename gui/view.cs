@@ -13,13 +13,21 @@ using Windows.Globalization;
 namespace Octarine {
 public class OctarineWindow : Form {
 private RichTextBox edt_result;
-private OctarineController controller;
+public readonly OctarineController controller;
 private string file=null;
+
+private static List<ToolStripMenuItem> additionalMenus = new List<ToolStripMenuItem>();
+
+private static OctarineWindow _CurrentWindow;
+public static OctarineWindow CurrentWindow {get{return _CurrentWindow;}}
 
 public OctarineWindow(OctarineController tcontroller) {
 controller=tcontroller;
 controller.SetWindow(this);
-this.Shown += (sender, e) => controller.Initiate();
+this.Shown += (sender, e) => {
+_CurrentWindow=this;
+controller.Initiate();
+};
 
 this.Size = new Size(800,600);
 this.Text = "Octarine";
@@ -54,6 +62,9 @@ wnd_settings.ShowDialog(this);
 }));
 mb_tools.DropDownItems.Add(mi_settings);
 ms.Items.Add(mb_tools);
+foreach(ToolStripMenuItem mi in additionalMenus) {
+ms.Items.Add(mi);
+}
 MainMenuStrip = ms;
 
 }
@@ -103,6 +114,10 @@ break;
 }
 if(msg!=null) errormessage+="\n"+msg;
 MessageBox.Show(errormessage, "Wystąpił błąd podczas próby otwarcia pliku", MessageBoxButtons.OK, MessageBoxIcon.Error);
+}
+
+public static void RegisterAdditionalMenu(ToolStripMenuItem mi) {
+additionalMenus.Add(mi);
 }
 }
 }
