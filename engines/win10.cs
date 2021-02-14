@@ -55,5 +55,7 @@ this.language = lang;
 public Language currentLanguage {get{
 return this.language;
 }}
+
+public bool CanEnable(bool auto=true) {return true;}
 }
 }

@@ -28,6 +28,7 @@ public Language currentLanguage {get;}
 public Language[] Languages {get;}
 public void SetLanguage(Language lang);
 public bool ShouldRegister{get;}
+public bool CanEnable(bool auto=true);
 }
 
 public static class IEngineExtensions {
@@ -35,6 +36,12 @@ public static string ReadConfig(this IEngine engine, string value) {
 return Config.ReadConfig(value, @"engines\"+engine.ID);
 }
 public static void WriteConfig(this IEngine engine, string value, string data) {
+Config.WriteConfig(value, data, @"engines\"+engine.ID);
+}
+public static int ReadConfigInt(this IEngine engine, string value) {
+return Config.ReadConfigInt(value, @"engines\"+engine.ID);
+}
+public static void WriteConfig(this IEngine engine, string value, int data) {
 Config.WriteConfig(value, data, @"engines\"+engine.ID);
 }
 }

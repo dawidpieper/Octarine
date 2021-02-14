@@ -29,9 +29,11 @@ IEngine[] engines = OctarineEngines.engines;
 if(engines.Count()==0) return null;
 if(eng!=null)
 foreach(IEngine engine in engines) {
-if(engine.ID==eng) return engine;
+if(engine.ID==eng && engine.CanEnable()) return engine;
 }
-return engines[0];
+foreach(IEngine engine in engines)
+if(engine.CanEnable()) return engine;
+return null;
 }
 set {
 _Engine=value;

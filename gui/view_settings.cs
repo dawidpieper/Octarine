@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Globalization;
+using Octarine.OctarineEngine;
 
 namespace Octarine {
 public class OctarineSettingsWindow : Form {
@@ -78,6 +79,7 @@ if(lst_language.SelectedIndex==-1) {
 MessageBox.Show(this, "Nie wybrano języka.", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
 return;
 }
+if(!engine.CanEnable(false)) return;
 controller.Engine=engine;
 if(engine.Languages!=null) controller.SetLanguage(engine, engine.Languages[lst_language.SelectedIndex]);
 this.Close();
