@@ -3,6 +3,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
+using System.Collections.Generic;
 using Windows.Globalization;
 
 namespace Octarine {
@@ -20,19 +21,48 @@ Assembly.LoadFile(Path.GetFullPath(plugin));
 }
 }
 
+private static List<Type> loadedTypes=null;
+
+private static Type[] GetLoadedTypes(bool refresh=false) {
+if(loadedTypes==null || refresh) {
+loadedTypes = new List<Type>();
+Assembly[] assems = AppDomain.CurrentDomain.GetAssemblies();
+foreach (Assembly a in assems) {
+try {
+foreach(Type p in a.GetTypes()) {
+loadedTypes.Add(p);
+}
+} catch {
+DialogResult d = MessageBox.Show("Nie udało się załadować pliku "+new Uri(a.CodeBase).LocalPath+"\nTa wtyczka nie będzie dostępna.", "Błąd podczas ładowania pliku", MessageBoxButtons.AbortRetryIgnore , MessageBoxIcon.Error);
+if(d==DialogResult.Abort) Environment.Exit(1);
+else if(d==DialogResult.Retry) return GetLoadedTypes(true);
+}
+}
+}
+return loadedTypes.ToArray();
+}
+
 private static void RegisterEngines() {
-Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(p => typeof(OctarineEngine.iEngine).IsAssignableFrom(p) && p.IsClass).ToArray();
-foreach (Type type in types) {
-OctarineEngine.iEngine engine = (OctarineEngine.iEngine)Activator.CreateInstance(type);
+Assembly[] assems = AppDomain.CurrentDomain.GetAssemblies();
+foreach(Type p in GetLoadedTypes()) {
+try {
+if(typeof(OctarineEngine.iEngine).IsAssignableFrom(p) && p.IsClass) {
+OctarineEngine.iEngine engine = (OctarineEngine.iEngine)Activator.CreateInstance(p);
 if(engine.ShouldRegister) OctarineEngines.RegisterEngine(engine);
+}
+} catch{}
 }
 }
 
 private static void RegisterHooks() {
-Type[] types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes()).Where(p => typeof(OctarineHook.iHook).IsAssignableFrom(p) && p.IsClass).ToArray();
-foreach (Type type in types) {
-OctarineHook.iHook hook = (OctarineHook.iHook)Activator.CreateInstance(type);
-OctarineHooks.RegisterHook(hook);
+Assembly[] assems = AppDomain.CurrentDomain.GetAssemblies();
+foreach(Type p in GetLoadedTypes()) {
+try {
+if(typeof(OctarineHook.iHook).IsAssignableFrom(p) && p.IsClass) {
+OctarineHook.iHook Hook = (OctarineHook.iHook)Activator.CreateInstance(p);
+OctarineHooks.RegisterHook(Hook);
+}
+} catch{}
 }
 }
 

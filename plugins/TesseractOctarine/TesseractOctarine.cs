@@ -23,6 +23,7 @@ TesseractEnviornment.CustomSearchPath=dir;
 var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Languages[0];
 this.language = new Windows.Globalization.Language(topUserLanguage);
 }
+public string ID {get{return "Tesseract";}}
 public string Name {get{return "Tesseract";}}
 public bool ShouldRegister {get{return true;}}
 

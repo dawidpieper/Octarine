@@ -21,6 +21,7 @@ registeredEngines.Add(engine);
 
 namespace Octarine.OctarineEngine {
 public interface iEngine {
+public string ID {get;}
 public string Name {get;}
 public Task<(string, OctarineError,string)> GetTextFromStreamAsync(IRandomAccessStream stream);
 public Language currentLanguage {get;}

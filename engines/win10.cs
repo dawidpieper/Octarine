@@ -19,6 +19,7 @@ public Win10Engine() {
 var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Languages[0];
 this.language = new Windows.Globalization.Language(topUserLanguage);
 }
+public string ID {get{return "Win10";}}
 public string Name {get{return "Windows 10 OCR";}}
 public bool ShouldRegister {get{return true;}}
 
