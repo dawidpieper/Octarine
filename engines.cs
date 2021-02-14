@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Windows.Globalization;
 using System.Threading.Tasks;
-using Windows.Storage.Streams;
+using System.IO;
 
 namespace Octarine {
 public class OctarineEngines {
@@ -23,10 +22,10 @@ namespace Octarine.OctarineEngine {
 public interface IEngine {
 public string ID {get;}
 public string Name {get;}
-public Task<(string, OctarineError,string)> GetTextFromStreamAsync(IRandomAccessStream stream);
-public Language currentLanguage {get;}
-public Language[] Languages {get;}
-public void SetLanguage(Language lang);
+public Task<(string, OctarineError,string)> GetTextFromStreamAsync(Stream stream);
+public OctarineLanguage currentLanguage {get;}
+public OctarineLanguage[] Languages {get;}
+public void SetLanguage(OctarineLanguage code);
 public bool ShouldRegister{get;}
 public bool CanEnable(bool auto=true);
 }

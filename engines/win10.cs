@@ -23,7 +23,8 @@ public string ID {get{return "Win10";}}
 public string Name {get{return "Windows 10 OCR";}}
 public bool ShouldRegister {get{return true;}}
 
-public async Task<(string, OctarineError, string)> GetTextFromStreamAsync(IRandomAccessStream stream) {
+public async Task<(string, OctarineError, string)> GetTextFromStreamAsync(Stream istream) {
+IRandomAccessStream stream = istream.AsRandomAccessStream();
 if(!OcrEngine.IsLanguageSupported(language))
 return (null, OctarineError.LanguageNotSupported,null);
 try {
@@ -42,18 +43,21 @@ return (null, OctarineError.EngineError, ex.Message);
 }
 }
 
-public Language[] Languages {get{
-var langs = new List<Language>();
-foreach(var lang in OcrEngine.AvailableRecognizerLanguages) langs.Add(lang);
+public OctarineLanguage[] Languages {get{
+var langs = new List<OctarineLanguage>();
+foreach(var lang in OcrEngine.AvailableRecognizerLanguages) langs.Add(new OctarineLanguage(lang.DisplayName, lang.LanguageTag));
 return langs.ToArray();
 }}
 
-public void SetLanguage(Language lang) {
+public void SetLanguage(OctarineLanguage lng) {
+foreach(var lang in OcrEngine.AvailableRecognizerLanguages) 
+if(lng.Code == lang.LanguageTag)
 this.language = lang;
 }
 
-public Language currentLanguage {get{
-return this.language;
+public OctarineLanguage currentLanguage {get{
+if(this.language==null) return null;
+return new OctarineLanguage(this.language.DisplayName, this.language.LanguageTag);
 }}
 
 public bool CanEnable(bool auto=true) {return true;}

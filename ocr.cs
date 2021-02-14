@@ -58,7 +58,7 @@ status.PageCurrent=i+1;
 using (PdfPage page = pdfDoc.GetPage(i)) {
 var stream = new InMemoryRandomAccessStream();
 await page.RenderToStreamAsync(stream);
-(string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream);
+(string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream.AsStream());
 if(result==null) {
 status.Error=error;
 status.ErrorMessage=errorMessage;
@@ -71,7 +71,7 @@ sb.Append(result);
 return sb.ToString();
 } else {
 var stream = await file.OpenAsync(FileAccessMode.Read);
-(string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream);
+(string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream.AsStream());
 if(result==null) {
 status.Error=error;
 status.ErrorMessage=errorMessage;
@@ -90,7 +90,7 @@ return null;
 }
 }
 
-public static async Task<string> GetTextFromStreamAsync(IRandomAccessStream stream, OctarineEngine.IEngine engine, OCRStatus status) {
+public static async Task<string> GetTextFromStreamAsync(Stream stream, OctarineEngine.IEngine engine, OCRStatus status) {
 try {
 (string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream);
 if(result==null) {

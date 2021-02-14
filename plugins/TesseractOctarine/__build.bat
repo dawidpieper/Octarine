@@ -1,3 +1,3 @@
 md build 2>nul
 rc /fo build/TesseractOctarine.res TesseractOctarine.rc
-csc /out:build/TesseractOctarine.dll TesseractOctarine.cs /r:lib/tesseract.dll /r:../../build/octarine.exe /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.dll" /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.WindowsRuntime.dll" /r:"%programfiles(x86)%\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd" /optimize /target:library /platform:anycpu  /win32res:build/TesseractOctarine.res
+csc /out:build/TesseractOctarine.dll TesseractOctarine.cs /r:lib/tesseract.dll /r:../../build/octarine.exe /optimize /target:library /platform:anycpu  /win32res:build/TesseractOctarine.res

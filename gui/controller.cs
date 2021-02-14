@@ -96,7 +96,7 @@ updateWorker=null;
 }
 }
 
-public void PrepareOCR(IRandomAccessStream stream, string name="Plik") {
+public void PrepareOCR(Stream stream, string name="Plik") {
 if(updateWorker!=null && !updateWorker.IsCompleted) {
 updateWorkerCTS.Cancel();
 try {
@@ -134,10 +134,10 @@ updateWorker=null;
 }
 }
 
-public void SetLanguage(IEngine engine, Language language) {
+public void SetLanguage(IEngine engine, OctarineLanguage language) {
 if(engine.Languages==null) return;
 engine.SetLanguage(language);
-engine.WriteConfig("Language", language.LanguageTag);
+engine.WriteConfig("Language", language.Code);
 wnd.RefreshResult();
 }
 

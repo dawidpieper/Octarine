@@ -72,7 +72,9 @@ foreach(OctarineEngine.IEngine engine in OctarineEngines.engines) {
 string lng = engine.ReadConfig("Language");
 if(lng!=null) {
 try {
-engine.SetLanguage(new Language(lng));
+foreach(OctarineLanguage lang in engine.Languages)
+if(lang.Code==lng)
+engine.SetLanguage(lang);
 } catch{}
 }
 }

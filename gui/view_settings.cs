@@ -93,8 +93,8 @@ lst_language.SelectedIndex=-1;
 int i=0;
 if(engine.Languages!=null)
 foreach(var lang in engine.Languages) {
-lst_language.Items.Add(lang.DisplayName);
-if(lang.LanguageTag == engine.currentLanguage.LanguageTag) lst_language.SelectedIndex=i;
+lst_language.Items.Add(lang.Name);
+if(lang.Code == engine.currentLanguage.Code) lst_language.SelectedIndex=i;
 ++i;
 }
 else {
