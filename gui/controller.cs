@@ -14,27 +14,28 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using Windows.Globalization;
 using Windows.Storage.Streams;
+using Octarine.OctarineEngine;
 
 namespace Octarine {
 public class OctarineController {
 
-private OctarineEngine.iEngine _Engine=null;
+private IEngine _Engine=null;
 
-public OctarineEngine.iEngine Engine {
+public IEngine Engine {
 get {
 if(_Engine!=null) return _Engine;
 string eng = Config.ReadConfig("Engine");
-OctarineEngine.iEngine[] engines = OctarineEngines.engines;
+IEngine[] engines = OctarineEngines.engines;
 if(engines.Count()==0) return null;
 if(eng!=null)
-foreach(OctarineEngine.iEngine engine in engines) {
-if(engine.GetType().Name==eng) return engine;
+foreach(IEngine engine in engines) {
+if(engine.ID==eng) return engine;
 }
 return engines[0];
 }
 set {
 _Engine=value;
-Config.WriteConfig("Engine", _Engine.GetType().Name);
+Config.WriteConfig("Engine", _Engine.ID);
 }
 }
 
@@ -131,9 +132,10 @@ updateWorker=null;
 }
 }
 
-public void SetLanguage(OctarineEngine.iEngine engine, Language language) {
+public void SetLanguage(IEngine engine, Language language) {
+if(engine.Languages==null) return;
 engine.SetLanguage(language);
-Config.WriteConfig("Language", language.LanguageTag, @"engines\"+engine.GetType().Name);
+engine.WriteConfig("Language", language.LanguageTag);
 wnd.RefreshResult();
 }
 

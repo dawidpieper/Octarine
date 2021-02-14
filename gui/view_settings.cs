@@ -8,7 +8,7 @@ using Windows.Globalization;
 
 namespace Octarine {
 public class OctarineSettingsWindow : Form {
-private List<OctarineEngine.iEngine> engines;
+private List<OctarineEngine.IEngine> engines;
 
 private Label lb_engine, lb_language;
 private ListBox lst_engine, lst_language;
@@ -19,8 +19,8 @@ private OctarineController controller;
 public OctarineSettingsWindow(OctarineController tcontroller) {
 controller=tcontroller;
 
-engines = new List<OctarineEngine.iEngine>();
-foreach(OctarineEngine.iEngine engine in OctarineEngines.engines)
+engines = new List<OctarineEngine.IEngine>();
+foreach(OctarineEngine.IEngine engine in OctarineEngines.engines)
 engines.Add(engine);
 
 this.Size = new Size(320,320);
@@ -64,7 +64,7 @@ this.AcceptButton = btn_ok;
 
 lst_engine.SelectedIndexChanged += (sender, e) => ShowLanguagesForEngine(engines[lst_engine.SelectedIndex]);
 if(engines.Count()>0) {
-foreach(OctarineEngine.iEngine engine in engines) {
+foreach(OctarineEngine.IEngine engine in engines) {
 lst_engine.Items.Add(engine.Name);
 if(engine==controller.Engine) lst_engine.SelectedIndex=lst_engine.Items.Count-1;
 }
@@ -79,20 +79,25 @@ MessageBox.Show(this, "Nie wybrano języka.", "Błąd", MessageBoxButtons.OK, Me
 return;
 }
 controller.Engine=engine;
-controller.SetLanguage(engine, engine.languages[lst_language.SelectedIndex]);
+if(engine.Languages!=null) controller.SetLanguage(engine, engine.Languages[lst_language.SelectedIndex]);
 this.Close();
 }
 };
 }
 
-private void ShowLanguagesForEngine(OctarineEngine.iEngine engine) {
+private void ShowLanguagesForEngine(OctarineEngine.IEngine engine) {
 lst_language.Items.Clear();
 lst_language.SelectedIndex=-1;
 int i=0;
-foreach(var lang in engine.languages) {
+if(engine.Languages!=null)
+foreach(var lang in engine.Languages) {
 lst_language.Items.Add(lang.DisplayName);
 if(lang.LanguageTag == engine.currentLanguage.LanguageTag) lst_language.SelectedIndex=i;
 ++i;
+}
+else {
+lst_language.Items.Add("Rozpoznaj automatycznie");
+lst_language.SelectedIndex=0;
 }
 }
 }

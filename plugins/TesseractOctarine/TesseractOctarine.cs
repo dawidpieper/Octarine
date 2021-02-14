@@ -13,9 +13,10 @@ using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Controls;
 using Windows.Graphics.Imaging;
 using Tesseract;
+using Octarine.OctarineEngine;
 
 namespace Octarine.OctarineEngine {
-public class TesseractOctarineEngine : iEngine {
+public class TesseractOctarineEngine : IEngine {
 private Language language;
 public TesseractOctarineEngine() {
 string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\dependencies";
@@ -44,7 +45,7 @@ return (null, OctarineError.EngineError, null);
 }
 }
 
-public Language[] languages {get{
+public Language[] Languages {get{
 var langs = new List<Language>();
 var dict = new Dictionary<string, string>();
 foreach(CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures)) {

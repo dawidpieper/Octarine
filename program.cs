@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
 using Windows.Globalization;
+using Octarine.OctarineEngine;
 
 namespace Octarine {
 public class Program {
@@ -46,8 +47,8 @@ private static void RegisterEngines() {
 Assembly[] assems = AppDomain.CurrentDomain.GetAssemblies();
 foreach(Type p in GetLoadedTypes()) {
 try {
-if(typeof(OctarineEngine.iEngine).IsAssignableFrom(p) && p.IsClass) {
-OctarineEngine.iEngine engine = (OctarineEngine.iEngine)Activator.CreateInstance(p);
+if(typeof(OctarineEngine.IEngine).IsAssignableFrom(p) && p.IsClass) {
+OctarineEngine.IEngine engine = (OctarineEngine.IEngine)Activator.CreateInstance(p);
 if(engine.ShouldRegister) OctarineEngines.RegisterEngine(engine);
 }
 } catch{}
@@ -67,8 +68,8 @@ OctarineHooks.RegisterHook(Hook);
 }
 
 private static void SetEngines() {
-foreach(OctarineEngine.iEngine engine in OctarineEngines.engines) {
-string lng = Config.ReadConfig("Language", @"engines\"+engine.GetType().Name);
+foreach(OctarineEngine.IEngine engine in OctarineEngines.engines) {
+string lng = engine.ReadConfig("Language");
 if(lng!=null) {
 try {
 engine.SetLanguage(new Language(lng));

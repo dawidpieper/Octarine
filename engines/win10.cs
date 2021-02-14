@@ -13,7 +13,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.Graphics.Imaging;
 
 namespace Octarine.OctarineEngine {
-public class Win10Engine : iEngine {
+public class Win10Engine : IEngine {
 private Language language;
 public Win10Engine() {
 var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.Languages[0];
@@ -42,7 +42,7 @@ return (null, OctarineError.EngineError, ex.Message);
 }
 }
 
-public Language[] languages {get{
+public Language[] Languages {get{
 var langs = new List<Language>();
 foreach(var lang in OcrEngine.AvailableRecognizerLanguages) langs.Add(lang);
 return langs.ToArray();

@@ -42,7 +42,7 @@ public OCRStatus(){}
 }
 
 public class OCR {
-public static async Task<string> GetTextFromFileAsync(string filePath, OctarineEngine.iEngine engine, OCRStatus status) {
+public static async Task<string> GetTextFromFileAsync(string filePath, OctarineEngine.IEngine engine, OCRStatus status) {
 try {
 var file = await StorageFile.GetFileFromPathAsync(filePath);
 if(Path.GetExtension(filePath).ToLower()==".pdf") {
@@ -90,7 +90,7 @@ return null;
 }
 }
 
-public static async Task<string> GetTextFromStreamAsync(IRandomAccessStream stream, OctarineEngine.iEngine engine, OCRStatus status) {
+public static async Task<string> GetTextFromStreamAsync(IRandomAccessStream stream, OctarineEngine.IEngine engine, OCRStatus status) {
 try {
 (string result, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream);
 if(result==null) {
