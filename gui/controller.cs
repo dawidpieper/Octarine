@@ -78,7 +78,7 @@ status.PageCurrentChanged += (sender, e) => {
 wnd_waiter.SetStatus($"Rozpoznawanie strony {status.PageCurrent} z {status.PageCount}");
 wnd_waiter.SetPercentage((int)(100*status.PageCurrent/status.PageCount));
 };
-string result = OCR.GetTextFromFileAsync(file, this.Engine, status).Result;
+OCRResult result = OCR.GetTextFromFileAsync(file, this.Engine, status).Result;
 if(result!=null)
 wnd.SetResult(file, result);
 else
@@ -116,7 +116,7 @@ status.PageCurrentChanged += (sender, e) => {
 wnd_waiter.SetStatus($"Rozpoznawanie strony {status.PageCurrent} z {status.PageCount}");
 wnd_waiter.SetPercentage((int)(100*status.PageCurrent/status.PageCount));
 };
-string result = OCR.GetTextFromStreamAsync(stream, this.Engine, status).Result;
+OCRResult result = OCR.GetTextFromStreamAsync(stream, this.Engine, status).Result;
 if(result!=null)
 wnd.SetResult(name, result);
 else

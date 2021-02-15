@@ -22,7 +22,7 @@ namespace Octarine.OctarineEngine {
 public interface IEngine {
 public string ID {get;}
 public string Name {get;}
-public Task<(string, OctarineError,string)> GetTextFromStreamAsync(Stream stream);
+public Task<(OCRPage, OctarineError,string)> GetTextFromStreamAsync(Stream stream);
 public OctarineLanguage currentLanguage {get;}
 public OctarineLanguage[] Languages {get;}
 public void SetLanguage(OctarineLanguage code);

@@ -88,10 +88,10 @@ controller.SaveFile(dialog.FileName, edt_result.Text);
 dialog.Dispose();
 }
 
-public void SetResult(string file, string result) {
+public void SetResult(string file, OCRResult result) {
 this.Text = Path.GetFileName(file)+" - Octarine";
 this.file=file;
-edt_result.Text=result;
+edt_result.Text=result.Text;
 }
 
 public void RefreshResult() {

@@ -23,16 +23,18 @@ public string ID {get{return "Tesseract";}}
 public string Name {get{return "Tesseract";}}
 public bool ShouldRegister {get{return true;}}
 
-public async Task<(string, OctarineError, string)> GetTextFromStreamAsync(Stream stream) {
+public async Task<(OCRPage, OctarineError, string)> GetTextFromStreamAsync(Stream stream) {
 System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
+OCRPage page = new OCRPage(img);
 string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\dependencies\tessdata";
 try {
 using(var engine = new TesseractEngine(dir, this.language.Code, EngineMode.Default)) {
 Bitmap bmp = new System.Drawing.Bitmap(img);
 Pix pix = PixConverter.ToPix(bmp);
-using (var page = engine.Process(pix)) {
+using (var oPage = engine.Process(pix)) {
 await Task.Delay(1);
-return (page.GetText(), OctarineError.Success, null);
+page.AddFragment(oPage.GetText(), oPage.RegionOfInterest.X1, oPage.RegionOfInterest.Y1, oPage.RegionOfInterest.Width, oPage.RegionOfInterest.Height);
+return (page, OctarineError.Success, null);
 }
 }
 } catch{
