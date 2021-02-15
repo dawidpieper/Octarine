@@ -97,6 +97,12 @@ updateWorker=null;
 }
 
 public void PrepareOCR(Stream stream, string name="Plik") {
+Stream[] streams = new Stream[1];
+streams[0]=stream;
+PrepareOCR(streams, name);
+}
+
+public void PrepareOCR(Stream[] streams, string name="Plik") {
 if(updateWorker!=null && !updateWorker.IsCompleted) {
 updateWorkerCTS.Cancel();
 try {
@@ -109,14 +115,13 @@ updateWorkerCTS = new CancellationTokenSource();
 updateWorkerCT = updateWorkerCTS.Token;
 updateWorker = Task.Factory.StartNew(() => {
 wnd_waiter.SetStatus("Przygotowywanie");
-
 OCRStatus status = new OCRStatus();
 status.OCRCancellationToken = updateWorkerCT;
 status.PageCurrentChanged += (sender, e) => {
 wnd_waiter.SetStatus($"Rozpoznawanie strony {status.PageCurrent} z {status.PageCount}");
 wnd_waiter.SetPercentage((int)(100*status.PageCurrent/status.PageCount));
 };
-OCRResult result = OCR.GetTextFromStreamAsync(stream, this.Engine, status).Result;
+OCRResult result = OCR.GetTextFromStreamsAsync(streams, this.Engine, status).Result;
 if(result!=null)
 wnd.SetResult(name, result);
 else

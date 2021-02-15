@@ -176,5 +176,28 @@ return null;
 }
 }
 
+public static async Task<OCRResult> GetTextFromStreamsAsync(Stream[] streams, OctarineEngine.IEngine engine, OCRStatus status) {
+var result = new OCRResult();
+try {
+foreach(Stream stream in streams) {
+(OCRPage page, OctarineError error, string errorMessage) = await engine.GetTextFromStreamAsync(stream);
+if(page==null) {
+status.Error=error;
+status.ErrorMessage=errorMessage;
+return null;
+}
+if(status.OCRCancellationToken.IsCancellationRequested) {
+status.Error=OctarineError.CancellationRequested;
+return null;
+}
+result.AddPage(page);
+}
+return result;
+} catch(Exception ex) {
+status.Error=OctarineError.WrongFileFormat;
+status.ErrorMessage=ex.Message;
+return null;
+}
+}
 }
 }
