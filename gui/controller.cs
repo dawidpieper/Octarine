@@ -76,7 +76,9 @@ OCRStatus status = new OCRStatus();
 status.OCRCancellationToken = updateWorkerCT;
 status.PageCurrentChanged += (sender, e) => {
 wnd_waiter.SetStatus($"Rozpoznawanie strony {status.PageCurrent} z {status.PageCount}");
-wnd_waiter.SetPercentage((int)(100*status.PageCurrent/status.PageCount));
+int prc=(int)(100*status.PageCurrent/status.PageCount);
+if(prc>100) prc=100;
+wnd_waiter.SetPercentage(prc);
 };
 OCRResult result = OCR.GetTextFromFileAsync(file, this.Engine, status).Result;
 if(result!=null)
