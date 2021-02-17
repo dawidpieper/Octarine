@@ -1,3 +1,4 @@
+using Microsoft.Win32;
 using System;
 using System.IO;
 using System.Reflection;
@@ -15,7 +16,7 @@ string dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)+@"\plug
 if(!Directory.Exists(dir)) return;
 string[] plugins = Directory.GetFiles(dir);
 foreach(string plugin in plugins)
-if(plugin.EndsWith(".dll")) {
+if(plugin.ToLower().EndsWith(".octarine.dll")) {
 try {
 Assembly.LoadFile(Path.GetFullPath(plugin));
 } catch{}
@@ -86,7 +87,7 @@ public static void Main() {
 AppDomain currentDomain = AppDomain.CurrentDomain;
 currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromSameFolder);
 static Assembly LoadFromSameFolder(object sender, ResolveEventArgs args) {
-string folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+@"\plugins\dependencies";
+string folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)+@"\plugins";
 string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
 if (!File.Exists(assemblyPath)) return null;
 Assembly assembly = Assembly.LoadFrom(assemblyPath);

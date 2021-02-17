@@ -10,14 +10,14 @@ FILETYPE VFT_DLL
  {
   BLOCK "040904E4"
   {
-   VALUE "ProductName", "TesseractOctarine\000"
-   VALUE "ProductVersion", "TesseractOctarine 1.0\000"
+   VALUE "ProductName", "Tesseract.Octarine\000"
+   VALUE "ProductVersion", "Tesseract.Octarine 1.0\000"
    VALUE "CompanyName", "Dawid Pieper\000"
    VALUE "FileDescription", "Tesseract plugin for Octarine - A Simple OCR\000"
    VALUE "FileVersion", "1.0.0.0\000"
-   VALUE "InternalName", "TesseractOctarine\000"
+   VALUE "InternalName", "Tesseract.Octarine\000"
    VALUE "LegalCopyright", "Dawid Pieper\000"
-   VALUE "OriginalFilename", "TesseractOctarine.dll\000"
+   VALUE "OriginalFilename", "Tesseract.Octarine.dll\000"
   }
  }
  BLOCK "VarFileInfo"

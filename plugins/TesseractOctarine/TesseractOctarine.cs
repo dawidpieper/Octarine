@@ -14,7 +14,7 @@ namespace Octarine.OctarineEngine {
 public class TesseractOctarineEngine : IEngine {
 private OctarineLanguage language;
 public TesseractOctarineEngine() {
-string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\dependencies";
+string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\Tesseract.Octarine";
 TesseractEnviornment.CustomSearchPath=dir;
 CultureInfo ci = Thread.CurrentThread.CurrentCulture;
 this.language = new OctarineLanguage(ci.DisplayName, ci.ThreeLetterISOLanguageName);
@@ -26,7 +26,7 @@ public bool ShouldRegister {get{return true;}}
 public async Task<(OCRPage, OctarineError, string)> GetTextFromStreamAsync(Stream stream) {
 System.Drawing.Image img = System.Drawing.Image.FromStream(stream);
 OCRPage page = new OCRPage(img);
-string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\dependencies\tessdata";
+string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\dependencies\Tesseract.Octarine";
 try {
 using(var engine = new TesseractEngine(dir, this.language.Code, EngineMode.Default)) {
 Bitmap bmp = new System.Drawing.Bitmap(img);
@@ -51,7 +51,7 @@ if(ci.IsNeutralCulture) name=ci.DisplayName;
 else name=ci.Parent.DisplayName;
 dict[ci.ThreeLetterISOLanguageName.ToLower()] = name;
 }
-string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\dependencies\tessdata";
+string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\Tesseract.Octarine\tessdata";
 string[] lngs = Directory.GetFiles(dir);
 foreach(string lang in lngs) {
 if(!lang.EndsWith(".traineddata")) continue;
