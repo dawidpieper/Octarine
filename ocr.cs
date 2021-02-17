@@ -12,6 +12,7 @@ using Windows.Data.Pdf;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Controls;
 using Windows.Graphics.Imaging;
+using Windows.Foundation;
 
 namespace Octarine {
 
@@ -121,10 +122,10 @@ private struct InternalOCRProcessorStatus {
 public OctarineEngine.IEngine Engine;
 public OCRStatus Status;
 public Stream Source;
-public uint PageNumber;
+public int PageNumber;
 public OCRPage[] Pages;
 public bool Started;
-public InternalOCRProcessorStatus(OctarineEngine.IEngine engine, OCRStatus status, Stream source, uint pageNumber, OCRPage[] pages) {
+public InternalOCRProcessorStatus(OctarineEngine.IEngine engine, OCRStatus status, Stream source, int pageNumber, OCRPage[] pages) {
 Engine=engine;
 Status=status;
 Source=source;
@@ -135,20 +136,37 @@ Started=false;
 }
 
 
-public static async Task<OCRResult> GetTextFromFileAsync(string filePath, OctarineEngine.IEngine engine, OCRStatus status) {
+public static uint GetPDFPagesCount(string filePath) {
+//try {
+if(Path.GetExtension(filePath).ToLower()!=".pdf") return 0;
+var op1 = StorageFile.GetFileFromPathAsync(filePath);
+while(op1.Status==AsyncStatus.Started) Thread.Sleep(100);
+var file = op1.GetResults();
+var op2 = PdfDocument.LoadFromFileAsync(file);
+while(op2.Status==AsyncStatus.Started) Thread.Sleep(100);
+var pdfDoc = op2.GetResults();
+return pdfDoc.PageCount;
+//} catch{return 0;}
+}
+
+public static async Task<OCRResult> GetTextFromFileAsync(string filePath, OctarineEngine.IEngine engine, OCRStatus status, int pageFirst=0, int pageLast=0) {
 var result = new OCRResult(filePath);
 try {
 var file = await StorageFile.GetFileFromPathAsync(filePath);
 if(Path.GetExtension(filePath).ToLower()==".pdf") {
 var pdfDoc = await PdfDocument.LoadFromFileAsync(file);
-status.PageCount = pdfDoc.PageCount;
-Stream[] streams = new Stream[status.PageCount];
+if(pageFirst<=0) pageFirst=1;
+if(pageLast<=0 || pageLast>pdfDoc.PageCount) pageLast=(int)pdfDoc.PageCount;
+uint pagesToRecognize = (uint)(pageLast-pageFirst+1);
+status.PageCount = pagesToRecognize;
+
+Stream[] streams = new Stream[pagesToRecognize];
 int pagesRunning = 0;
 int numThreads = Environment.ProcessorCount;
-for (uint p = 0; p < status.PageCount; p++) {
+for (int p = pageFirst-1; p < pageLast; p++) {
 while(pagesRunning>numThreads) await Task.Delay(10);
-using (PdfPage pdfPage = pdfDoc.GetPage(p)) {
-int i=(int)p;
+using (PdfPage pdfPage = pdfDoc.GetPage((uint)p)) {
+int i=(int)p-pageFirst+1;
 _ = Task.Run(async () => {
 ++pagesRunning;
 var stream = new InMemoryRandomAccessStream();
@@ -161,10 +179,10 @@ await Task.Delay(10);
 }
 while(pagesRunning>0) await Task.Delay(200);
 OCRPage[] pages = new OCRPage[status.PageCount];
-for (uint i = 0; i < status.PageCount; i++) {
+for( int i = pageFirst-1; i < pageLast; i++) {
 if(status.Error!=OctarineError.Success) break;
 while(status.ActiveWorkers>numThreads) await Task.Delay(200);
-var st = new InternalOCRProcessorStatus(engine, status, streams[i], i, pages);
+var st = new InternalOCRProcessorStatus(engine, status, streams[i-pageFirst+1], i-pageFirst+1, pages);
 //new Thread(new ParameterizedThreadStart(ProcessWithPage)).Start(st);
 _ = Task.Run(() => ProcessWithPageAsync(st));
 await Task.Delay(250);

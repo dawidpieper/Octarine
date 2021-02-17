@@ -66,6 +66,18 @@ updateWorker.Wait();
 } catch{}
 updateWorker=null;
 }
+int pageFirst=0, pageLast=0;
+
+if(Path.GetExtension(file).ToLower()==".pdf") {
+int cnt = (int)OCR.GetPDFPagesCount(file);
+if(cnt>1) {
+var wnd_range = new PageRangeWindow(cnt);
+wnd_range.ShowDialog(wnd);
+if(wnd_range.Cancelled) return;
+pageFirst=wnd_range.PageFirst;
+pageLast=wnd_range.PageLast;
+}
+}
 LoadingWindow wnd_waiter = new LoadingWindow("Rozpoznawanie");
 updateWorkerCTS = new CancellationTokenSource();
 updateWorkerCT = updateWorkerCTS.Token;
@@ -80,7 +92,7 @@ int prc=(int)(100*status.PageCurrent/status.PageCount);
 if(prc>100) prc=100;
 wnd_waiter.SetPercentage(prc);
 };
-OCRResult result = OCR.GetTextFromFileAsync(file, this.Engine, status).Result;
+OCRResult result = OCR.GetTextFromFileAsync(file, this.Engine, status, pageFirst, pageLast).Result;
 if(result!=null)
 wnd.SetResult(file, result);
 else
