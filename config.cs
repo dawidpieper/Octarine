@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using Microsoft.Win32;
 
 namespace Octarine {
@@ -54,6 +55,14 @@ if(subkey!=null) path+=@"\"+subkey;
 using(RegistryKey key = Registry.CurrentUser.CreateSubKey(path)) {
 key.SetValue(value, data);
 }
+}
+
+public static string GetDataDir(string subdir=null) {
+string basedir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData )+"\\Octarine";
+string dir=basedir;
+if(subdir!=null) dir+="\\"+subdir;
+Directory.CreateDirectory(dir);
+return dir;
 }
 }
 }

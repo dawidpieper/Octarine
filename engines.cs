@@ -43,5 +43,12 @@ return Config.ReadConfigInt(value, @"engines\"+engine.ID);
 public static void WriteConfig(this IEngine engine, string value, int data) {
 Config.WriteConfig(value, data, @"engines\"+engine.ID);
 }
+
+public static string GetDataDir(this IEngine engine, string subdir=null) {
+string basedir="engines\\"+engine.ID;
+string dir=basedir;
+if(subdir!=null) dir+="\\"+subdir;
+return Config.GetDataDir(dir);
+}
 }
 }
