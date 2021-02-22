@@ -40,7 +40,7 @@ public System.Drawing.Image _Source;
 public List<OCRFragment> _Fragments;
 public System.Drawing.Image Source {get{return _Source;}}
 public OCRFragment[] Fragments {get{return _Fragments.ToArray();}}
-public OCRPage(System.Drawing.Image source=null) {
+public OCRPage(System.Drawing.Image source) {
 _Source=source;
 _Fragments = new List<OCRFragment>();
 }
@@ -137,7 +137,7 @@ Started=false;
 
 
 public static uint GetPDFPagesCount(string filePath) {
-//try {
+try {
 if(Path.GetExtension(filePath).ToLower()!=".pdf") return 0;
 var op1 = StorageFile.GetFileFromPathAsync(filePath);
 while(op1.Status==AsyncStatus.Started) Thread.Sleep(100);
@@ -146,7 +146,7 @@ var op2 = PdfDocument.LoadFromFileAsync(file);
 while(op2.Status==AsyncStatus.Started) Thread.Sleep(100);
 var pdfDoc = op2.GetResults();
 return pdfDoc.PageCount;
-//} catch{return 0;}
+} catch{return 0;}
 }
 
 public static async Task<OCRResult> GetTextFromFileAsync(string filePath, OctarineEngine.IEngine engine, OCRStatus status, int pageFirst=0, int pageLast=0) {
@@ -183,7 +183,6 @@ for( int i = pageFirst-1; i < pageLast; i++) {
 if(status.Error!=OctarineError.Success) break;
 while(status.ActiveWorkers>numThreads) await Task.Delay(200);
 var st = new InternalOCRProcessorStatus(engine, status, streams[i-pageFirst+1], i-pageFirst+1, pages);
-//new Thread(new ParameterizedThreadStart(ProcessWithPage)).Start(st);
 _ = Task.Run(() => ProcessWithPageAsync(st));
 await Task.Delay(250);
 }

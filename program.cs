@@ -72,10 +72,12 @@ private static void SetEngines() {
 foreach(OctarineEngine.IEngine engine in OctarineEngines.engines) {
 string lng = engine.ReadConfig("Language");
 if(lng!=null) {
+int q = engine.ReadConfigInt("Quality");
+if(q==0) q=0;
 try {
 foreach(OctarineLanguage lang in engine.Languages)
 if(lang.Code==lng)
-engine.SetLanguage(lang);
+engine.SetLanguage(lang, q);
 } catch{}
 }
 }

@@ -23,11 +23,14 @@ public interface IEngine {
 public string ID {get;}
 public string Name {get;}
 public Task<(OCRPage, OctarineError,string)> GetTextFromStreamAsync(Stream stream);
-public OctarineLanguage currentLanguage {get;}
+public OctarineLanguage CurrentLanguage {get;}
+public int CurrentQuality {get;}
 public OctarineLanguage[] Languages {get;}
-public void SetLanguage(OctarineLanguage code);
+public void SetLanguage(OctarineLanguage code, int quality=0);
 public bool ShouldRegister{get;}
 public bool CanEnable(bool auto=true);
+public bool CanDownloadLanguages{get;}
+public OctarineLanguage[] GetDownloadableLanguages();
 }
 
 public static class IEngineExtensions {

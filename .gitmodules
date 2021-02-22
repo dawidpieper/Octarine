@@ -1,3 +1,0 @@
-[submodule "plugins/TesseractOctarine/tessdata"]
-	path = plugins/TesseractOctarine/tessdata
-	url = https://github.com/tesseract-ocr/tessdata.git

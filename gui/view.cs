@@ -10,7 +10,9 @@ using System.Threading;
 using System.Threading.Tasks;
 
 namespace Octarine {
-public class OctarineWindow : Form {
+public class OctarineWindowBase : Form {}
+
+public class OctarineWindow : OctarineWindowBase {
 private RichTextBox edt_result;
 public readonly OctarineController controller;
 private string file=null;

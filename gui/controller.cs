@@ -153,15 +153,64 @@ updateWorker=null;
 }
 }
 
-public void SetLanguage(IEngine engine, OctarineLanguage language) {
+public void SetLanguage(IEngine engine, OctarineLanguage language, int quality=0) {
 if(engine.Languages==null) return;
-engine.SetLanguage(language);
+engine.SetLanguage(language, quality);
 engine.WriteConfig("Language", language.Code);
+if(quality>0) engine.WriteConfig("Quality", quality);
 wnd.RefreshResult();
 }
 
 public void SaveFile(string file, string text) {
 File.WriteAllText(file, text);
+}
+
+public bool OpenDownloader(string[] sources, string[] destinations, Form window=null, string label="Pobieranie") {
+if(window==null) window=wnd;
+bool cancellationProcessed=false;
+var l = new LoadingWindow(label);
+l.SetStatus("Inicjowanie...");
+bool cancelled = true;
+var cts = new CancellationTokenSource();
+var ct = cts.Token;
+Task.Factory.StartNew(() => {
+int i=0;
+using (var client = new WebClient ()) {
+client.DownloadProgressChanged += (sender, e) => {
+int percentage = i*100;
+percentage += e.ProgressPercentage;
+percentage = percentage/sources.Count();
+l.SetPercentage(percentage);
+l.SetStatus($"Pobieranie pliku {i+1} z {sources.Count()}: {e.BytesReceived/1048576} / {e.TotalBytesToReceive/1048576} MB");
+if(ct.IsCancellationRequested) {
+client.CancelAsync();
+cancellationProcessed=true;
+}
+};
+client.DownloadFileCompleted += (sender, e) => {
+i++;
+if(i<sources.Count())
+client.DownloadFileAsync(new Uri(sources[i]), destinations[i]);
+else {
+cancelled=false;
+l.Close();
+}
+};
+client.DownloadFileAsync(new Uri(sources[i]), destinations[i]);
+}
+}, ct);
+l.ShowDialog(window);
+if(cancelled) {
+cts.Cancel();
+while(cancellationProcessed==false) Thread.Sleep(100);
+for(int i=0; i<destinations.Count(); ++i) {
+try {
+if(File.Exists(destinations[i]))
+File.Delete(destinations[i]);
+} catch{}
+}
+}
+return !cancelled;
 }
 }
 }

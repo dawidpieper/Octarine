@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using Microsoft.Win32;
 
 namespace Octarine {
@@ -58,7 +59,12 @@ key.SetValue(value, data);
 }
 
 public static string GetDataDir(string subdir=null) {
-string basedir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData )+"\\Octarine";
+string basedir;
+string dr = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\data";
+if(Directory.Exists(dr))
+basedir=dr;
+else
+basedir = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData )+"\\Octarine";
 string dir=basedir;
 if(subdir!=null) dir+="\\"+subdir;
 Directory.CreateDirectory(dir);

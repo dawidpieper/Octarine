@@ -24,10 +24,11 @@ public string Name {get{return "Windows 10 OCR";}}
 public bool ShouldRegister {get{return true;}}
 
 public async Task<(OCRPage, OctarineError, string)> GetTextFromStreamAsync(Stream istream) {
+var page = new OCRPage(System.Drawing.Image.FromStream(istream));
+istream.Seek(0, SeekOrigin.Begin);
 IRandomAccessStream stream = istream.AsRandomAccessStream();
 if(!OcrEngine.IsLanguageSupported(language))
 return (null, OctarineError.LanguageNotSupported,null);
-var page = new OCRPage();
 try {
 var engine = OcrEngine.TryCreateFromLanguage(language);
 var decoder = await BitmapDecoder.CreateAsync(stream);
@@ -54,17 +55,22 @@ foreach(var lang in OcrEngine.AvailableRecognizerLanguages) langs.Add(new Octari
 return langs.ToArray();
 }}
 
-public void SetLanguage(OctarineLanguage lng) {
+public void SetLanguage(OctarineLanguage lng, int quality=-1) {
 foreach(var lang in OcrEngine.AvailableRecognizerLanguages) 
 if(lng.Code == lang.LanguageTag)
 this.language = lang;
 }
 
-public OctarineLanguage currentLanguage {get{
+public OctarineLanguage CurrentLanguage {get{
 if(this.language==null) return null;
 return new OctarineLanguage(this.language.DisplayName, this.language.LanguageTag);
 }}
+public int CurrentQuality{get=>-1;}
 
 public bool CanEnable(bool auto=true) {return true;}
+
+public bool CanDownloadLanguages{get => false;}
+
+public OctarineLanguage[] GetDownloadableLanguages()=>null;
 }
 }
