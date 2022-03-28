@@ -31,6 +31,10 @@ public bool ShouldRegister{get;}
 public bool CanEnable(bool auto=true);
 public bool CanDownloadLanguages{get;}
 public OctarineLanguage[] GetDownloadableLanguages();
+public bool SecondaryLanguagesSupported{get;}
+public bool AddSecondaryLanguage(OctarineLanguage lang);
+public bool ClearSecondaryLanguages();
+public OctarineLanguage[] GetSecondaryLanguages();
 }
 
 public static class IEngineExtensions {

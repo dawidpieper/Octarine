@@ -71,6 +71,12 @@ public bool CanEnable(bool auto=true) {return true;}
 
 public bool CanDownloadLanguages{get => false;}
 
+public bool SecondaryLanguagesSupported{get => false;}
+
 public OctarineLanguage[] GetDownloadableLanguages()=>null;
+
+public bool AddSecondaryLanguage(OctarineLanguage lang) {return false;}
+public bool ClearSecondaryLanguages() {return false;}
+public OctarineLanguage[] GetSecondaryLanguages() {return null;}
 }
 }

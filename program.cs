@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Windows.Forms;
 using System.Linq;
 using System.Collections.Generic;
+using System.Net;
 using Windows.Globalization;
 using Octarine.OctarineEngine;
 
@@ -70,14 +71,19 @@ OctarineHooks.RegisterHook(Hook);
 
 private static void SetEngines() {
 foreach(OctarineEngine.IEngine engine in OctarineEngines.engines) {
+string slng = engine.ReadConfig("SecondaryLanguages");
+string[] selang = null;
+if(slng!=null) selang=slng.Split(',');
 string lng = engine.ReadConfig("Language");
 if(lng!=null) {
 int q = engine.ReadConfigInt("Quality");
 if(q==0) q=0;
 try {
-foreach(OctarineLanguage lang in engine.Languages)
-if(lang.Code==lng)
-engine.SetLanguage(lang, q);
+if(engine.SecondaryLanguagesSupported) engine.ClearSecondaryLanguages();
+foreach(OctarineLanguage lang in engine.Languages) {
+if(lang.Code==lng) engine.SetLanguage(lang, q);
+if(selang.Contains(lang.Code) && engine.SecondaryLanguagesSupported) engine.AddSecondaryLanguage(lang);
+}
 } catch{}
 }
 }
@@ -85,6 +91,8 @@ engine.SetLanguage(lang, q);
 
 [STAThread]
 public static void Main() {
+
+ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
 AppDomain currentDomain = AppDomain.CurrentDomain;
 currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromSameFolder);

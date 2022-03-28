@@ -153,11 +153,27 @@ updateWorker=null;
 }
 }
 
-public void SetLanguage(IEngine engine, OctarineLanguage language, int quality=0) {
+public void SetLanguage(IEngine engine, OctarineLanguage language, OctarineLanguage[] secondaryLanguages=null, int quality=0) {
 if(engine.Languages==null) return;
 engine.SetLanguage(language, quality);
+if(engine.SecondaryLanguagesSupported) {
+engine.ClearSecondaryLanguages();
+if(secondaryLanguages!=null)
+foreach(var l in secondaryLanguages)
+engine.AddSecondaryLanguage(l);
+}
 engine.WriteConfig("Language", language.Code);
 if(quality>0) engine.WriteConfig("Quality", quality);
+if(engine.SecondaryLanguagesSupported) {
+string sl = "";
+var selan = secondaryLanguages;
+if(selan.Count()>0)
+foreach(OctarineLanguage l in selan) {
+if(sl!="") sl+=",";
+sl+=l.Code;
+}
+engine.WriteConfig("SecondaryLanguages", sl);
+}
 wnd.RefreshResult();
 }
 
