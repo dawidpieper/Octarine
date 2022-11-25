@@ -52,9 +52,10 @@ public string Text {get{
 var sb = new StringBuilder();
 bool s=true;
 foreach(OCRFragment fragment in _Fragments) {
-if(s) sb.Append("\r\n");
+if(string.IsNullOrWhiteSpace(fragment.Text)) continue;
+if(s && fragment.Text.Length>0 && fragment.Text[fragment.Text.Length-1]!='\n') sb.Append("\n");
 s=true;
-sb.Append(fragment.Text);
+sb.Append(fragment.Text.Replace("\r\n","\n"));
 }
 return sb.ToString();
 }}
