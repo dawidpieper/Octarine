@@ -24,6 +24,7 @@ this.language = new OctarineLanguage(ci.DisplayName, ci.ThreeLetterISOLanguageNa
 }
 public string ID {get{return "Tesseract";}}
 public string Name {get{return "Tesseract";}}
+public int Priority {get{return 1;}}
 public bool ShouldRegister {get{return true;}}
 
 public async Task<(OCRPage, OctarineError, string)> GetTextFromStreamAsync(Stream stream) {

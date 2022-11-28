@@ -31,9 +31,14 @@ if(eng!=null)
 foreach(IEngine engine in engines) {
 if(engine.ID==eng && engine.CanEnable()) return engine;
 }
+IEngine best = null;
+int bestPriority = int.MinValue;
 foreach(IEngine engine in engines)
-if(engine.CanEnable()) return engine;
-return null;
+if(engine.CanEnable() && engine.Priority>bestPriority) {
+bestPriority=engine.Priority;
+best=engine;
+}
+return best;
 }
 set {
 _Engine=value;

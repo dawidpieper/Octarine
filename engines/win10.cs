@@ -21,6 +21,7 @@ this.language = new Windows.Globalization.Language(topUserLanguage);
 }
 public string ID {get{return "Win10";}}
 public string Name {get{return "Windows 10 OCR";}}
+public int Priority {get{return 0;}}
 public bool ShouldRegister {get{return true;}}
 
 public async Task<(OCRPage, OctarineError, string)> GetTextFromStreamAsync(Stream istream) {
