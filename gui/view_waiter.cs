@@ -39,13 +39,17 @@ this.CancelButton = btn_cancel;
 }
 
 public void SetStatus(String t) {
+try {
 lb_status.Text=t;
 lb_status.Update();
+} catch(Exception) {}
 }
 
 public void SetPercentage(int p) {
+try {
 pb_percentage.Value=p;
 pb_percentage.Update();
+} catch(Exception) {}
 }
 }
 }

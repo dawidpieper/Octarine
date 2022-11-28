@@ -144,5 +144,10 @@ return langs.ToArray();
 } catch {return null;}
 }
 
+public bool SecondaryLanguagesSupported{get => false;}
+
+public bool AddSecondaryLanguage(OctarineLanguage lang) {return false;}
+public bool ClearSecondaryLanguages() {return false;}
+public OctarineLanguage[] GetSecondaryLanguages() {return null;}
 }
 }

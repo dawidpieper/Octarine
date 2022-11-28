@@ -152,13 +152,14 @@ lst_language.Items.Clear();
 clt_secondary.Items.Clear();
 lst_language.SelectedIndex=-1;
 int i=0;
+int desiredIndex=-1;
 OctarineLanguage[] selan = null;
 if(engine.SecondaryLanguagesSupported) selan = engine.GetSecondaryLanguages();
 if(engine.Languages!=null)
 foreach(var lang in engine.Languages) {
 lst_language.Items.Add(lang.Name);
 clt_secondary.Items.Add(lang.Name);
-if(lang.Code == engine.CurrentLanguage.Code) lst_language.SelectedIndex=i;
+if(lang.Code == engine.CurrentLanguage.Code) desiredIndex=i;
 if(selan!=null)
 foreach(var l in selan)
 if(l.Code==lang.Code) clt_secondary.SetItemChecked(i, true);
@@ -168,6 +169,7 @@ else {
 lst_language.Items.Add("Rozpoznaj automatycznie");
 lst_language.SelectedIndex=0;
 }
+lst_language.SelectedIndex=desiredIndex;
 if(lst_language.SelectedIndex>=0 && engine.Languages!=null) {
 ShowQualitiesForLanguage(engine, engine.Languages[lst_language.SelectedIndex]);
 clt_secondary.SetItemCheckState(lst_language.SelectedIndex, CheckState.Indeterminate);
