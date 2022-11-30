@@ -75,16 +75,26 @@ public void AddPage(OCRPage page) {
 _Pages.Add(page);
 }
 
+public void RemovePage(int index) {
+if(index<_Pages.Count)
+_Pages.RemoveAt(index);
+}
+
 public string Text {get{
 var sb = new StringBuilder();
-bool s=true;
-foreach(OCRPage page in _Pages) {
-if(s) sb.Append("\r\n\r\n");
-s=true;
-sb.Append(page.Text);
+foreach(string page in GetPaginatedText()) {
+sb.Append(page);
 }
 return sb.ToString();
 }}
+public string[] GetPaginatedText() {
+var pages = new List<string>();
+foreach(OCRPage page in _Pages) {
+if(pages.Count>0) pages[pages.Count-1]+="\n\n";
+pages.Add(page.Text);
+}
+return pages.ToArray();
+}
 }
 
 public class OCRStatus {

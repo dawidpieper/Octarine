@@ -72,6 +72,10 @@ ToolStripMenuItem mi_findNext = new ToolStripMenuItem("Znajdź &następny", null
 new EventHandler((sender, e) => {FindNext();}));
 mi_findNext.ShortcutKeys = Keys.F3;
 mb_edit.DropDownItems.Add(mi_findNext);
+ToolStripMenuItem mi_paginator = new ToolStripMenuItem("S&trony", null,
+new EventHandler((sender, e) => {Paginator();}));
+mi_paginator.ShortcutKeys = Keys.Control | Keys.G;
+mb_edit.DropDownItems.Add(mi_paginator);
 ms.Items.Add(mb_edit);
 ToolStripMenuItem mb_tools = new ToolStripMenuItem("&Narzędzia");
 ToolStripMenuItem mi_settings = new ToolStripMenuItem("Wybór &silnika", null,
@@ -157,6 +161,34 @@ catch {
 MessageBox.Show("Nie znaleziono wskazanego tekstu", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
 }
 }
+}
+
+public void Paginator() {
+if(Result==null) return;
+string[] paginatedText = Result.GetPaginatedText();
+int currentPageIndex=0;
+int total=0;
+for(int i=0; i<paginatedText.Count(); ++i) {
+total+=paginatedText[i].Length;
+if(total > edt_result.SelectionStart) {
+currentPageIndex=i;
+break;
+}
+}
+var wnd = new PagesWindow(Result);
+wnd.SetPageIndex(currentPageIndex);
+wnd.PageDelete += (sender, e) => {
+Result.RemovePage(e.Page);
+SetResult(this.file, Result);
+paginatedText = Result.GetPaginatedText();
+};
+wnd.PageJump += (sender, e) => {
+int t = 0;
+for(int i=0; i<e.Page; ++i) t+=paginatedText[i].Length;
+edt_result.SelectionStart=t;
+wnd.Close();
+};
+wnd.ShowDialog(this);
 }
 
 public void ShowError(OctarineError error, string msg=null) {

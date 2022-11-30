@@ -9,8 +9,8 @@ private Label lb_input;
 private TextBox edt_input;
 private Button btn_search, btn_close;
 public SearchWindow() {
-this.Width = 500;
-this.Height = 142;
+this.ShowInTaskbar=false;
+this.Size = new Size(500, 150);
 this.Text = "Znajdź";
 lb_input = new Label();
 lb_input.Text = "Znajdź";
