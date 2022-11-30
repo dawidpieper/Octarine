@@ -17,6 +17,7 @@ private RichTextBox edt_result;
 public readonly OctarineController controller;
 private string file=null;
 private OCRResult Result = null;
+private SearchWindow CurrentSearchWindow = null;
 
 private static List<ToolStripMenuItem> additionalMenus = new List<ToolStripMenuItem>();
 
@@ -62,6 +63,16 @@ ToolStripMenuItem mi_exit = new ToolStripMenuItem("Za&kończ", null,
 new EventHandler((sender, e) => {this.Close();}));
 mb_file.DropDownItems.Add(mi_exit);
 ms.Items.Add(mb_file);
+ToolStripMenuItem mb_edit = new ToolStripMenuItem("&Edycja");
+ToolStripMenuItem mi_find = new ToolStripMenuItem("&Znajdź", null,
+new EventHandler((sender, e) => {ShowFindDialog();}));
+mi_find.ShortcutKeys = Keys.Control | Keys.F;
+mb_edit.DropDownItems.Add(mi_find);
+ToolStripMenuItem mi_findNext = new ToolStripMenuItem("Znajdź &następny", null,
+new EventHandler((sender, e) => {FindNext();}));
+mi_findNext.ShortcutKeys = Keys.F3;
+mb_edit.DropDownItems.Add(mi_findNext);
+ms.Items.Add(mb_edit);
 ToolStripMenuItem mb_tools = new ToolStripMenuItem("&Narzędzia");
 ToolStripMenuItem mi_settings = new ToolStripMenuItem("Wybór &silnika", null,
 new EventHandler((sender, e) => {
@@ -117,6 +128,35 @@ edt_result.Text=result.Text;
 
 public void RefreshResult() {
 if(this.file!=null) controller.PrepareOCR(this.file);
+}
+
+public void ShowFindDialog() {
+if(CurrentSearchWindow==null) {
+CurrentSearchWindow = new SearchWindow();
+CurrentSearchWindow.FindNext += (sender, e) => {
+FindNext(CurrentSearchWindow.CurrentSearchPhrase);
+};
+}
+CurrentSearchWindow.ShowDialog(this);
+}
+
+public void FindNext(string searchText=null) {
+if(searchText==null || searchText=="") {
+if(CurrentSearchWindow==null || (searchText==null && CurrentSearchWindow.CurrentSearchPhrase=="")) {
+ShowFindDialog();
+return;
+}
+else searchText = CurrentSearchWindow.CurrentSearchPhrase;
+}
+if(searchText!="") {
+try {
+var fp = edt_result.Find(searchText, edt_result.SelectionStart+1, RichTextBoxFinds.None);
+edt_result.Select(fp, searchText.Length);
+}
+catch {
+MessageBox.Show("Nie znaleziono wskazanego tekstu", "Błąd", MessageBoxButtons.OK, MessageBoxIcon.Error);
+}
+}
 }
 
 public void ShowError(OctarineError error, string msg=null) {
