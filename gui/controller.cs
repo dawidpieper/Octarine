@@ -14,6 +14,10 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using Windows.Globalization;
 using Windows.Storage.Streams;
+using PdfSharp;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
 using Octarine.OctarineEngine;
 
 namespace Octarine {
@@ -184,6 +188,29 @@ wnd.RefreshResult();
 
 public void SaveFile(string file, string text) {
 File.WriteAllText(file, text);
+}
+
+public void SavePDF(string file, OCRResult res, bool addText=true, bool addImages=true) {
+PdfDocument document = new PdfDocument();
+document.Info.Title = res.File;
+foreach(var p in res.Pages) {
+MemoryStream strm = new MemoryStream();
+p.Source.Save(strm, System.Drawing.Imaging.ImageFormat.Png);
+XImage xImage = XImage.FromStream(strm);
+PdfPage page = document.AddPage();
+page.Width = xImage.PixelWidth;
+page.Height = xImage.PixelHeight;
+XGraphics gfx = XGraphics.FromPdfPage(page);
+if(addImages) gfx.DrawImage(xImage, 0, 0, page.Width, page.Height);
+XFont font = new XFont("Verdana", 20, XFontStyle.BoldItalic);
+XBrush brush = new XSolidBrush(XColor.FromArgb(0, 0, 0, 0));
+if(!addImages) brush = new XSolidBrush(XColors.Black);
+if(addText)
+foreach(var f in p.Fragments) {
+gfx.DrawString(f.Text, font, brush, new XRect(f.X, f.Y, f.Width, f.Height), XStringFormats.Center);
+}
+}
+document.Save(file);
 }
 
 public bool OpenDownloader(string[] sources, string[] destinations, Form window=null, string label="Pobieranie") {

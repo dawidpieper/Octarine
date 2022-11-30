@@ -1,3 +1,4 @@
 md build 2>nul
 rc /fo build/Octarine.res Octarine.rc
-csc /out:build/Octarine.exe program.cs defs.cs hooks.cs engines.cs engines/win10.cs config.cs gui/view.cs gui/view_settings.cs gui/view_waiter.cs gui/view_pagerange.cs gui/view_downloader.cs gui/controller.cs ocr.cs /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.dll" /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.WindowsRuntime.dll" /r:"%programfiles(x86)%\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd" /optimize /target:winexe /platform:anycpu /win32res:build/Octarine.res
+copy /y lib\*.dll build\
+csc /out:build/Octarine.exe program.cs defs.cs hooks.cs engines.cs engines/win10.cs config.cs gui/view.cs gui/view_settings.cs gui/view_waiter.cs gui/view_pagerange.cs gui/view_downloader.cs gui/controller.cs ocr.cs /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.dll" /r:"C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\System.Runtime.WindowsRuntime.dll" /r:"%programfiles(x86)%\Windows Kits\10\UnionMetadata\10.0.19041.0\Windows.winmd" /r:lib/PdfSharp.dll /optimize /target:winexe /platform:anycpu /win32res:build/Octarine.res
