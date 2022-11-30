@@ -24,6 +24,8 @@ private static List<ToolStripMenuItem> additionalMenus = new List<ToolStripMenuI
 private static OctarineWindow _CurrentWindow;
 public static OctarineWindow CurrentWindow {get{return _CurrentWindow;}}
 
+private static string _Title = "Octarine";
+
 public OctarineWindow(OctarineController tcontroller) {
 controller=tcontroller;
 controller.SetWindow(this);
@@ -33,7 +35,7 @@ controller.Initiate();
 };
 
 this.Size = new Size(800,600);
-this.Text = "Octarine";
+this.Text = _Title;
 
 edt_result = new RichTextBox();
 edt_result.Size = new Size(760, 560);
@@ -76,18 +78,31 @@ ToolStripMenuItem mi_paginator = new ToolStripMenuItem("S&trony", null,
 new EventHandler((sender, e) => {Paginator();}));
 mi_paginator.ShortcutKeys = Keys.Control | Keys.G;
 mb_edit.DropDownItems.Add(mi_paginator);
-ms.Items.Add(mb_edit);
-ToolStripMenuItem mb_tools = new ToolStripMenuItem("&Narzędzia");
-ToolStripMenuItem mi_settings = new ToolStripMenuItem("Wybór &silnika", null,
+ToolStripMenuItem mi_settings = new ToolStripMenuItem("U&stawienia rozpoznawania", null,
 new EventHandler((sender, e) => {
 OctarineSettingsWindow wnd_settings = new OctarineSettingsWindow(this.controller);
 wnd_settings.ShowDialog(this);
 }));
-mb_tools.DropDownItems.Add(mi_settings);
-ms.Items.Add(mb_tools);
+mb_edit.DropDownItems.Add(mi_settings);
+ms.Items.Add(mb_edit);
 foreach(ToolStripMenuItem mi in additionalMenus) {
 ms.Items.Add(mi);
 }
+ToolStripMenuItem mb_help = new ToolStripMenuItem("Pomo&c");
+ToolStripMenuItem mi_website = new ToolStripMenuItem("Strona &www programu", null,
+new EventHandler((sender, e) => {
+System.Diagnostics.Process.Start("https://octarine.pl");
+}));
+mb_help.DropDownItems.Add(mi_website);
+ToolStripMenuItem mi_about = new ToolStripMenuItem("&O programie", null,
+new EventHandler((sender, e) => {
+MessageBox.Show("Octarine - prosty program OCR\nCopyright (©) (2020 - 2022) Dawid Pieper\n\nNiniejszy program jest wolnym oprogramowaniem.\nDozwala się jego dalsze rozprowadzanie lub modyfikację  na warunkach licencji GNU General Public License V3, wydanej przez Free Software Foundation.\nKod źródłowy aplikacji znajduje się na jej stronie w serwisie Github.", "Octarine "+Program.Version);
+}));
+mb_help.DropDownItems.Add(mi_about);
+ToolStripMenuItem mi_updates = new ToolStripMenuItem("Sprawdź dostępność akt&ualizacji", null,
+new EventHandler((sender, e) => {controller.CheckForUpdates(true);}));
+mb_help.DropDownItems.Add(mi_updates);
+ms.Items.Add(mb_help);
 MainMenuStrip = ms;
 
 }
@@ -124,7 +139,7 @@ dialog.Dispose();
 }
 
 public void SetResult(string file, OCRResult result) {
-this.Text = Path.GetFileName(file)+" - Octarine";
+this.Text = Path.GetFileName(file)+" - "+_Title;
 this.file=file;
 this.Result=result;
 edt_result.Text=result.Text;
@@ -210,6 +225,25 @@ MessageBox.Show(errormessage, "Wystąpił błąd podczas próby otwarcia pliku",
 
 public static void RegisterAdditionalMenu(ToolStripMenuItem mi) {
 additionalMenus.Add(mi);
+}
+
+public static void OverrideWindowTitle(string t) {_Title=t;}
+
+public void RecommendConfiguration() {
+if(MessageBox.Show("Przed kontynuowaniem zaleca się skonfigurowanie ustawień języka. Czy chcesz zrobić to teraz?", "OCR nie został skonfigurowany", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes) {
+OctarineSettingsWindow wnd_settings = new OctarineSettingsWindow(this.controller);
+wnd_settings.ShowDialog(this);
+}
+}
+
+public void ProposeUpdate() {
+if(MessageBox.Show("Czy chcesz przejść do strony pobierania?", "Dostępna jest nowa wersja Octarine", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes) {
+System.Diagnostics.Process.Start("https://octarine.pl/pobierz");
+}
+}
+
+public void InformNoUpdate() {
+MessageBox.Show("Nie znaleziono dostępnych aktualizacji.", "Używasz najnowszej wersji programu Octarine.", MessageBoxButtons.OK, MessageBoxIcon.Information);
 }
 }
 }

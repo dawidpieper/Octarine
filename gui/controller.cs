@@ -12,6 +12,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Net.Http;
 using Windows.Globalization;
 using Windows.Storage.Streams;
 using PdfSharp;
@@ -19,6 +20,7 @@ using PdfSharp.Drawing;
 using PdfSharp.Pdf;
 using PdfSharp.Pdf.IO;
 using Octarine.OctarineEngine;
+using Newtonsoft.Json;
 
 namespace Octarine {
 public class OctarineController {
@@ -61,6 +63,8 @@ public OctarineController() {
 
 public void SetWindow(OctarineWindow twnd) {
 wnd=twnd;
+CheckForUpdates();
+OctarineHooks.TriggerEvent(OctarineEvent.ProgramReady);
 }
 
 public void Initiate() {
@@ -68,6 +72,7 @@ public void Initiate() {
 }
 
 public void PrepareOCR(string file) {
+if(this.Engine.IsConfigurationRecommended) wnd.RecommendConfiguration();
 if(updateWorker!=null && !updateWorker.IsCompleted) {
 updateWorkerCTS.Cancel();
 try {
@@ -259,6 +264,21 @@ File.Delete(destinations[i]);
 }
 }
 return !cancelled;
+}
+
+public async void CheckForUpdates(bool manually=false) {
+using (var client = new HttpClient()) {
+var url = "http://api.octarine.pl/versions";
+var response = await client.GetAsync(url);
+if(!response.IsSuccessStatusCode ) return;
+var json = await response.Content.ReadAsStringAsync();
+dynamic j;
+try {
+j = JsonConvert.DeserializeObject(json);
+} catch {return;}
+if(j.Octarine != Program.Version) wnd.ProposeUpdate();
+else if(manually) wnd.InformNoUpdate();
+}
 }
 }
 }

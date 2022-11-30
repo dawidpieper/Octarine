@@ -78,6 +78,7 @@ public OctarineLanguage[] GetDownloadableLanguages()=>null;
 
 public bool AddSecondaryLanguage(OctarineLanguage lang) {return false;}
 public bool ClearSecondaryLanguages() {return false;}
+public bool IsConfigurationRecommended {get => false;}
 public OctarineLanguage[] GetSecondaryLanguages() {return null;}
 }
 }

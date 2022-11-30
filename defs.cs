@@ -7,7 +7,8 @@ WrongFileFormat,
 EngineError
 }
 public enum OctarineEvent {
-ProgramLoaded
+ProgramLoaded,
+ProgramReady
 }
 
 public class OctarineLanguage {

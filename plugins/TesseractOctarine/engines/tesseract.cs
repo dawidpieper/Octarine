@@ -149,5 +149,6 @@ public bool SecondaryLanguagesSupported{get => false;}
 public bool AddSecondaryLanguage(OctarineLanguage lang) {return false;}
 public bool ClearSecondaryLanguages() {return false;}
 public OctarineLanguage[] GetSecondaryLanguages() {return null;}
+public bool IsConfigurationRecommended {get => false;}
 }
 }

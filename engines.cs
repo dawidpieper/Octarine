@@ -36,6 +36,7 @@ public bool SecondaryLanguagesSupported{get;}
 public bool AddSecondaryLanguage(OctarineLanguage lang);
 public bool ClearSecondaryLanguages();
 public OctarineLanguage[] GetSecondaryLanguages();
+public bool IsConfigurationRecommended{get;}
 }
 
 public static class IEngineExtensions {
