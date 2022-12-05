@@ -12,7 +12,7 @@ using Octarine.OctarineEngine;
 namespace Octarine {
 public class Program {
 
-public static string Version = "1.0 BETA 1";
+public static string Version = "1.0 BETA 2";
 
 private static void LoadPlugins() {
 string dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)+@"\plugins";
