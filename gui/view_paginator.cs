@@ -25,25 +25,36 @@ public PagesWindow(OCRResult result) {
 Result = result;
 this.FormBorderStyle = FormBorderStyle.FixedToolWindow;
 this.ShowInTaskbar=false;
-this.Size = new Size(480, 360);
+this.Size = new Size(600, 400);
 this.StartPosition = FormStartPosition.CenterScreen;
 this.Text = "Strony";
 
-lb_pages = new Label();
-lb_pages.Text = "Strony";
-lb_pages.Location = new Point(20, 20);
-lb_pages.Size = new Size(300, 50);
+lb_pages = new Label() {
+Left = 25,
+Top = 25,
+Width = 100,
+Height = 25,
+Text = "Strony"
+            };
 this.Controls.Add(lb_pages);
 
-lst_pages = new ListBox();
+lst_pages = new ListBox() {
+Left = 25,
+Top = 50,
+Width = 200,
+Height = 300
+            };
 lst_pages.Location = new Point(70, 20);
 lst_pages.Size = new Size(200, 270);
 this.Controls.Add(lst_pages);
 
-btn_jump = new Button();
-btn_jump.Text = "Przejdź";
-btn_jump.Size = new Size(100, 100);
-btn_jump.Location = new Point(240, 20);
+btn_jump = new Button() {
+Left = 250,
+Top = 50,
+Width = 100,
+Height = 30,
+Text = "Przejdź"
+            };
 btn_jump.Click += (sender, e) => {
 if(Result.Pages.Count()>0 && lst_pages.SelectedIndex!=-1 && PageJump!=null) {
 PageJump(this, new PageEventArgs(lst_pages.SelectedIndex));
@@ -51,10 +62,13 @@ PageJump(this, new PageEventArgs(lst_pages.SelectedIndex));
 };
 this.Controls.Add(btn_jump);
 
-btn_delete = new Button();
-btn_delete.Text = "Usuń";
-btn_delete.Size = new Size(100, 100);
-btn_delete.Location = new Point(240, 240);
+btn_delete = new Button() {
+Left = 250,
+Top = 100,
+Width = 100,
+Height = 30,
+Text = "Usuń"
+            };
 btn_delete.Click += (sender, e) => {
 if(Result.Pages.Count()>0 && lst_pages.SelectedIndex!=-1 && PageDelete!=null)
 if(MessageBox.Show(this, "Czy na pewno chcesz usunąć tę stronę?", "Octarine", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)==DialogResult.Yes) {
@@ -64,10 +78,13 @@ UpdateStatus();
 };
 this.Controls.Add(btn_delete);
 
-btn_close = new Button();
-btn_close.Text = "Zamknij";
-btn_close.Size = new Size(100, 100);
-btn_close.Location = new Point(360, 240);
+btn_close = new Button() {
+Left = 425,
+Top = 50,
+Width = 100,
+Height = 30,
+Text = "Zamknij"
+            };
 btn_close.Click += (sender, e) => {
 this.Close();
 };

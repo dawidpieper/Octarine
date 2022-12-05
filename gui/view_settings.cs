@@ -25,74 +25,116 @@ engines = new List<OctarineEngine.IEngine>();
 foreach(OctarineEngine.IEngine engine in OctarineEngines.engines)
 engines.Add(engine);
 
-this.Size = new Size(320, 600);
+this.Size = new Size(600, 600);
 this.Text = "Ustawienia - Octarine";
 this.ShowInTaskbar=false;
 
-lb_engine = new Label();
-lb_engine.Size = new Size(100, 100);
-lb_engine.Location = new Point(20, 20);
-lb_engine.Text="Silnik";
+lb_engine = new Label() {
+Left=30,
+Top=10,
+Width=100,
+Height=20,
+Text="Silnik"
+};
 this.Controls.Add(lb_engine);
-lst_engine = new ListBox();
-lst_engine.Size = new Size(180, 100);
-lst_engine.Location = new Point(120, 20);
+
+lst_engine = new ListBox() {
+Left=30,
+Top=30,
+Width=200,
+Height=100
+};
 this.Controls.Add(lst_engine);
 
-lb_language = new Label();
-lb_language.Size = new Size(100, 100);
-lb_language.Location = new Point(20, 140);
-lb_language.Text="Język";
+lb_language = new Label() {
+Left=30,
+Top=150,
+Width=100,
+Height=20,
+Text="Język"
+};
 this.Controls.Add(lb_language);
-lst_language = new ListBox();
-lst_language.Size = new Size(100, 100);
-lst_language.Location = new Point(120, 140);
+
+lst_language = new ListBox() {
+Left=30,
+Top=170,
+Width=200,
+Height=100
+};
 this.Controls.Add(lst_language);
-btn_downloadLanguages = new Button();
-btn_downloadLanguages.Text = "Pobierz pakiety językowe";
-btn_downloadLanguages.Size = new Size(80, 100);
-btn_downloadLanguages.Location = new Point(200, 140);
-btn_downloadLanguages.Enabled=false;
+
+btn_downloadLanguages = new Button() {
+Left=250,
+Top=170,
+Width=100,
+Height=20,
+Text = "Pobierz pakiety językowe",
+Enabled=false
+};
 btn_downloadLanguages.Click += (sender, e) => DownloadLanguages();
 this.Controls.Add(btn_downloadLanguages);
 
-lb_secondary = new Label();
-lb_secondary.Size = new Size(100, 100);
-lb_secondary.Location = new Point(20, 260);
-lb_secondary.Text="Języki dodatkowe";
+lb_secondary = new Label() {
+Left=30,
+Top=290,
+Width=150,
+Height=20,
+Text="Języki dodatkowe"
+};
 this.Controls.Add(lb_secondary);
-clt_secondary = new CheckedListBox();
-clt_secondary.Size = new Size(100, 100);
-clt_secondary.Location = new Point(120, 260);
+
+clt_secondary = new CheckedListBox() {
+Left=30,
+Top=310,
+Width=200,
+Height=100
+};
 this.Controls.Add(clt_secondary);
-btn_secondaryDeselectAll = new Button();
-btn_secondaryDeselectAll.Text = "Odznacz wszystkie";
-btn_secondaryDeselectAll.Size = new Size(80, 100);
-btn_secondaryDeselectAll.Location = new Point(200, 260);
-btn_secondaryDeselectAll.Enabled=false;
+
+btn_secondaryDeselectAll = new Button() {
+Left=250,
+Top=310,
+Width=100,
+Height=20,
+Text="Odznacz wszystkie",
+Enabled=false
+};
 btn_secondaryDeselectAll.Click += (sender, e) => SecondaryDeselectAll();
 this.Controls.Add(btn_secondaryDeselectAll);
 
-lb_quality = new Label();
-lb_quality.Size = new Size(100, 100);
-lb_quality.Location = new Point(20, 380);
-lb_quality.Text="Jakość";
+lb_quality = new Label() {
+Left=30,
+Top=430,
+Width=100,
+Height=20,
+Text="Jakość"
+};
 this.Controls.Add(lb_quality);
-lst_quality = new ListBox();
-lst_quality.Size = new Size(100, 100);
-lst_quality.Location = new Point(120, 380);
+
+lst_quality = new ListBox() {
+Left=30,
+Top=450,
+Width=200,
+Height=100
+};
 this.Controls.Add(lst_quality);
 
-btn_ok = new Button();
-btn_ok.Text = "OK";
-btn_ok.Size = new Size(50, 50);
-btn_ok.Location = new Point(20, 530);
+btn_ok = new Button() {
+Left=30,
+Top=570,
+Width=80,
+Height=20,
+Text="OK"
+};
 this.Controls.Add(btn_ok);
 
-btn_cancel = new Button();
-btn_cancel.Text = "Anuluj";
-btn_cancel.Size = new Size(50, 50);
-btn_cancel.Location = new Point(250, 530);
+btn_cancel = new Button() {
+Left=120,
+Top=570,
+Width=80,
+Height=20,
+Text="Anuluj"
+};
 this.Controls.Add(btn_cancel);
 
 this.CancelButton = btn_cancel;
