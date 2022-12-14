@@ -239,6 +239,12 @@ lst_quality.Items.Add("Szybka");
 lst_quality.Items.Add("Standardowa");
 lst_quality.Items.Add("Najlepsza");
 lst_quality.SelectedIndex=1;
+} else if(language.Qualities==4) {
+lst_quality.Items.Add("Szybka");
+lst_quality.Items.Add("Standardowa");
+lst_quality.Items.Add("Najlepsza");
+lst_quality.Items.Add("Ultra");
+lst_quality.SelectedIndex=1;
 } else {
 for(int i=0; i<language.Qualities; ++i)
 lst_quality.Items.Add((i+1).ToString());

@@ -19,8 +19,11 @@ private int quality=2;
 public TesseractOctarineEngine() {
 string dir = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath)+@"\Tesseract.Octarine";
 TesseractEnviornment.CustomSearchPath=dir;
+this.language = new OctarineLanguage("", "");
 CultureInfo ci = Thread.CurrentThread.CurrentCulture;
-this.language = new OctarineLanguage(ci.DisplayName, ci.ThreeLetterISOLanguageName, 3);
+foreach(var l in Languages)
+if(l.Code == ci.ThreeLetterISOLanguageName)
+this.language = new OctarineLanguage(l.Name, l.Code);
 }
 public string ID {get{return "Tesseract";}}
 public string Name {get{return "Tesseract";}}
@@ -149,6 +152,6 @@ public bool SecondaryLanguagesSupported{get => false;}
 public bool AddSecondaryLanguage(OctarineLanguage lang) {return false;}
 public bool ClearSecondaryLanguages() {return false;}
 public OctarineLanguage[] GetSecondaryLanguages() {return null;}
-public bool IsConfigurationRecommended {get => false;}
+public bool IsConfigurationRecommended {get => this.CurrentLanguage.Code=="";}
 }
 }

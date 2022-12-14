@@ -75,7 +75,7 @@ private static void SetEngines() {
 foreach(OctarineEngine.IEngine engine in OctarineEngines.engines) {
 string slng = engine.ReadConfig("SecondaryLanguages");
 string[] selang = null;
-if(slng!=null) selang=slng.Split(',');
+if(!string.IsNullOrEmpty(slng)) selang=slng.Split(',');
 string lng = engine.ReadConfig("Language");
 if(lng!=null) {
 int q = engine.ReadConfigInt("Quality");
