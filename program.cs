@@ -12,7 +12,7 @@ using Octarine.OctarineEngine;
 namespace Octarine {
 public class Program {
 
-public static string Version = "1.0 BETA 2";
+public static string Version = "1.0 BETA 3";
 
 private static void LoadPlugins() {
 string dir = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location)+@"\plugins";
@@ -84,7 +84,7 @@ try {
 if(engine.SecondaryLanguagesSupported) engine.ClearSecondaryLanguages();
 foreach(OctarineLanguage lang in engine.Languages) {
 if(lang.Code==lng) engine.SetLanguage(lang, q);
-if(selang.Contains(lang.Code) && engine.SecondaryLanguagesSupported) engine.AddSecondaryLanguage(lang);
+if(selang!=null && selang.Contains(lang.Code) && engine.SecondaryLanguagesSupported) engine.AddSecondaryLanguage(lang);
 }
 } catch{}
 }
